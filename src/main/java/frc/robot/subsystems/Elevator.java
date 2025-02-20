@@ -11,6 +11,7 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.ClosedLoopSlot;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
@@ -24,34 +25,21 @@ public class Elevator extends SubsystemBase {
   private SparkMaxConfig RightElevMotorConfig;
   private SparkMaxConfig LeftElevMotorConfig;
   private SparkClosedLoopController RightClosedLoopController;
-  private SparkClosedLoopController LeftClosedLoopController;
   private RelativeEncoder RightEncoder;
-  private RelativeEncoder LeftEncoder;
 
   /** Creates a new Elevator. */
   public Elevator() {
-    /*
-     * Initialize the SPARK MAX and get its encoder and closed loop controller
-     * objects for later use.
-     */
-    /************************************************************************************/
-    //We need to add the actual device ids here!!!!
-    /*************************************************************************************/
+
     RightElevMotor = new SparkMax(79, MotorType.kBrushless);
     LeftElevMotor = new SparkMax(77, MotorType.kBrushless);
 
-    /*
-     * Create a new SPARK MAX configuration object. This will store the
-     * configuration parameters for the SPARK MAX that we will set below.
-     */
     RightClosedLoopController = RightElevMotor.getClosedLoopController();
     RightEncoder = RightElevMotor.getEncoder();
 
-    LeftClosedLoopController = LeftElevMotor.getClosedLoopController();
-    LeftEncoder = LeftElevMotor.getEncoder();
-
     RightElevMotorConfig = new SparkMaxConfig();
     LeftElevMotorConfig = new SparkMaxConfig();
+
+    LeftElevMotorConfig.follow(RightElevMotor, true);
 
     /*
      * Configure the encoder. For this specific example, we are using the
@@ -86,37 +74,24 @@ public class Elevator extends SubsystemBase {
         .velocityFF(1.0 / 5767, ClosedLoopSlot.kSlot1)
         .outputRange(-1, 1, ClosedLoopSlot.kSlot1);
 
-    LeftElevMotorConfig.closedLoop
-        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-        // Set PID values for position control. We don't need to pass a closed loop
-        // slot, as it will default to slot 0.
-        .p(0.1)
-        .i(0)
-        .d(0)
-        .outputRange(-1, 1)
-        // Set PID values for velocity control in slot 1
-        .p(0.0001, ClosedLoopSlot.kSlot1)
-        .i(0, ClosedLoopSlot.kSlot1)
-        .d(0, ClosedLoopSlot.kSlot1)
-        .velocityFF(1.0 / 5767, ClosedLoopSlot.kSlot1)
-        .outputRange(-1, 1, ClosedLoopSlot.kSlot1);
-
-    /*
-     * Apply the configuration to the SPARK MAX.
-     *
-     * kResetSafeParameters is used to get the SPARK MAX to a known state. This
-     * is useful in case the SPARK MAX is replaced.
-     *
-     * kPersistParameters is used to ensure the configuration is not lost when
-     * the SPARK MAX loses power. This is useful for power cycles that may occur
-     * mid-operation.
-     */
     RightElevMotor.configure(RightElevMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
     LeftElevMotor.configure(LeftElevMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    int targetPosition = 0;
+    RightClosedLoopController.setReference(targetPosition, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+  }
+  public void up(){
+    RightElevMotor.set(0.1);
+  }
+  public void down(){
+    RightElevMotor.set(-0.1);
+  }
+  public void stop(){
+    RightElevMotor.stopMotor();
   }
 }
