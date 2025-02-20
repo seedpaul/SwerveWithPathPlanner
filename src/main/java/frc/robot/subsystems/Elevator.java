@@ -37,8 +37,8 @@ public class Elevator extends SubsystemBase {
     /************************************************************************************/
     //We need to add the actual device ids here!!!!
     /*************************************************************************************/
-    RightElevMotor = new SparkMax(1, MotorType.kBrushless);
-    LeftElevMotor = new SparkMax(2, MotorType.kBrushless);
+    RightElevMotor = new SparkMax(79, MotorType.kBrushless);
+    LeftElevMotor = new SparkMax(77, MotorType.kBrushless);
 
     /*
      * Create a new SPARK MAX configuration object. This will store the
