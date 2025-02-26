@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.*;
 
 public class RobotContainer {
 
@@ -45,6 +45,7 @@ public class RobotContainer {
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     public final Elevator elevator = new Elevator();
+    private final Climber climber = new Climber();
 
     /* Path follower */
     private final SendableChooser<Command> autoChooser;
@@ -90,11 +91,11 @@ public class RobotContainer {
         // reset the field-centric heading on left bumper press
         driverController.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
-        driverController.x().whileTrue(new InstantCommand(() -> elevator.up(), elevator));
-        driverController.x().onFalse(new InstantCommand(() -> elevator.stop(), elevator));
+        driverController.x().whileTrue(new InstantCommand(() -> climber.up(), elevator));
+        driverController.x().onFalse(new InstantCommand(() -> climber.stop(), elevator));
 
-        driverController.b().whileTrue(new InstantCommand(() -> elevator.down(), elevator));
-        driverController.b().onFalse(new InstantCommand(() -> elevator.stop(), elevator));
+        driverController.b().whileTrue(new InstantCommand(() -> climber.down(), elevator));
+        driverController.b().onFalse(new InstantCommand(() -> climber.stop(), elevator));
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }

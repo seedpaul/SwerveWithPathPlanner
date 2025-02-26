@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
@@ -30,8 +31,8 @@ public class Elevator extends SubsystemBase {
   /** Creates a new Elevator. */
   public Elevator() {
 
-    RightElevMotor = new SparkMax(79, MotorType.kBrushless);
-    LeftElevMotor = new SparkMax(77, MotorType.kBrushless);
+    RightElevMotor = new SparkMax(19, MotorType.kBrushless);
+    LeftElevMotor = new SparkMax(17, MotorType.kBrushless);
 
     RightClosedLoopController = RightElevMotor.getClosedLoopController();
     RightEncoder = RightElevMotor.getEncoder();
@@ -77,13 +78,28 @@ public class Elevator extends SubsystemBase {
     RightElevMotor.configure(RightElevMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
     LeftElevMotor.configure(LeftElevMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
+        // Initialize dashboard values
+    SmartDashboard.setDefaultNumber("Target Position", 0);
+    SmartDashboard.setDefaultNumber("Target Velocity", 0);
+    SmartDashboard.setDefaultBoolean("Control Mode", false);
+    SmartDashboard.setDefaultBoolean("Reset Encoder", false);
+
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    int targetPosition = 0;
-    RightClosedLoopController.setReference(targetPosition, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+    SmartDashboard.putNumber("Actual Position", RightEncoder.getPosition());
+    SmartDashboard.putNumber("Actual Velocity", RightEncoder.getVelocity());
+
+    if (SmartDashboard.getBoolean("Reset Encoder", false)) {
+      SmartDashboard.putBoolean("Reset Encoder", false);
+      // Reset the encoder position to 0
+      RightEncoder.setPosition(0);
+    }
+
+    double targetPosition = SmartDashboard.getNumber("Target Position", 0);
+    //RightClosedLoopController.setReference(targetPosition, ControlType.kPosition, ClosedLoopSlot.kSlot0);
   }
   public void up(){
     RightElevMotor.set(0.1);
