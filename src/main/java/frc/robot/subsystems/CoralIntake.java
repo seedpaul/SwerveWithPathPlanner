@@ -55,10 +55,10 @@ public class CoralIntake extends SubsystemBase {
     // This method will be called once per scheduler run
   }
   public void in(){
-    m_motor.set(0.1);
+    m_motor.set(-0.3);
   }
   public void out(){
-    m_motor.set(-0.1);
+    m_motor.set(1);
   }
   public void stop(){
     m_motor.stopMotor();

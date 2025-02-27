@@ -46,6 +46,10 @@ public class RobotContainer {
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     public final Elevator elevator = new Elevator();
     private final Climber climber = new Climber();
+    private final AlgaeIntake algaeIntake = new AlgaeIntake();
+    private final CoralIntake coralIntake = new CoralIntake();
+    private final AlgaeElbow algaeElbow = new AlgaeElbow();
+    private final CoralElbow coralElbow = new CoralElbow();
 
     /* Path follower */
     private final SendableChooser<Command> autoChooser;
@@ -89,13 +93,37 @@ public class RobotContainer {
         // driverController.start().and(driverController.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
         // reset the field-centric heading on left bumper press
-        driverController.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+        //driverController.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
-        driverController.x().whileTrue(new InstantCommand(() -> climber.up(), elevator));
-        driverController.x().onFalse(new InstantCommand(() -> climber.stop(), elevator));
+        driverController.x().whileTrue(new InstantCommand(() -> climber.out(), climber));
+        driverController.x().onFalse(new InstantCommand(() -> climber.stop(), climber));
 
-        driverController.b().whileTrue(new InstantCommand(() -> climber.down(), elevator));
-        driverController.b().onFalse(new InstantCommand(() -> climber.stop(), elevator));
+        driverController.b().whileTrue(new InstantCommand(() -> climber.climb(), climber));
+        driverController.b().onFalse(new InstantCommand(() -> climber.stop(), climber));
+
+        //driverController.y().whileTrue(new InstantCommand(() -> algaeIntake.in(), algaeIntake));
+        //driverController.y().onFalse(new InstantCommand(() -> algaeIntake.hold(), algaeIntake));
+
+        //driverController.a().whileTrue(new InstantCommand(() -> algaeIntake.out(), algaeIntake));
+        //driverController.a().onFalse(new InstantCommand(() -> algaeIntake.stop(), algaeIntake));
+
+        driverController.y().whileTrue(new InstantCommand(() -> elevator.up(), elevator));
+        driverController.y().onFalse(new InstantCommand(() -> elevator.hold(), elevator));
+
+        driverController.a().whileTrue(new InstantCommand(() -> elevator.down(), elevator));
+        driverController.a().onFalse(new InstantCommand(() -> elevator.hold(), elevator));
+
+        driverController.rightBumper().whileTrue(new InstantCommand(() -> coralIntake.in(), coralIntake));
+        driverController.rightBumper().onFalse(new InstantCommand(() -> coralIntake.stop(), coralIntake));
+        
+        driverController.leftBumper().whileTrue(new InstantCommand(() -> coralIntake.out(), coralIntake));
+        driverController.leftBumper().onFalse(new InstantCommand(() -> coralIntake.stop(), coralIntake));
+
+        driverController.button(7).whileTrue(new InstantCommand(() -> algaeElbow.down(), algaeElbow));
+        driverController.button(7).onFalse(new InstantCommand(() -> algaeElbow.stop(), algaeElbow));
+
+        driverController.button(8).whileTrue(new InstantCommand(() -> coralElbow.down(), coralElbow));
+        driverController.button(8).onFalse(new InstantCommand(() -> coralElbow.stop(), coralElbow));
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }

@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 //SparkMax motor controller
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.RelativeEncoder;
@@ -27,6 +28,8 @@ public class CoralElbow extends SubsystemBase {
     m_encoder = m_motor.getEncoder();
     m_motorConfig = new SparkMaxConfig();
 
+    m_motorConfig.idleMode(IdleMode.kBrake);
+
     m_motorConfig.closedLoop
       .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
       // Set PID values for position control. We don't need to pass a closed loop
@@ -51,10 +54,10 @@ public class CoralElbow extends SubsystemBase {
     // This method will be called once per scheduler run
   }
   public void up(){
-    m_motor.set(0.1);
+    m_motor.set(-0.3);
   }
   public void down(){
-    m_motor.set(-0.1);
+    m_motor.set(0.3);
   }
   public void stop(){
     m_motor.stopMotor();

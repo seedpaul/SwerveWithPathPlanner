@@ -15,22 +15,22 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 
 public class AlgaeIntake extends SubsystemBase {
 
-  private SparkMax RightElevMotor;
-  private SparkMax LeftElevMotor;
-  private SparkMaxConfig RightElevMotorConfig;
-  private SparkMaxConfig LeftElevMotorConfig;
+  private SparkMax RightAIMotor;
+  private SparkMax LeftAIMotor;
+  private SparkMaxConfig RightAIMotorConfig;
+  private SparkMaxConfig LeftAIMotorConfig;
 
   /** Creates a new Elevator. */
   public AlgaeIntake() {
 
-    RightElevMotor = new SparkMax(55, MotorType.kBrushless);
-    LeftElevMotor = new SparkMax(9, MotorType.kBrushless);
+    RightAIMotor = new SparkMax(55, MotorType.kBrushless);
+    LeftAIMotor = new SparkMax(9, MotorType.kBrushless);
 
-    RightElevMotorConfig = new SparkMaxConfig();
-    LeftElevMotorConfig = new SparkMaxConfig();
+    RightAIMotorConfig = new SparkMaxConfig();
+    LeftAIMotorConfig = new SparkMaxConfig();
 
-    RightElevMotor.configure(RightElevMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
-    LeftElevMotor.configure(LeftElevMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+    RightAIMotor.configure(RightAIMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+    LeftAIMotor.configure(LeftAIMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
   }
 
   @Override
@@ -38,15 +38,19 @@ public class AlgaeIntake extends SubsystemBase {
     // This method will be called once per scheduler run
   }
   public void in(){
-    RightElevMotor.set(0.1);
-    LeftElevMotor.set(-0.1);
+    RightAIMotor.set(-0.75);
+    LeftAIMotor.set(0.75);
   }
   public void out(){
-    RightElevMotor.set(-0.1);
-    LeftElevMotor.set(0.1);
+    RightAIMotor.set(0.75);
+    LeftAIMotor.set(-0.75);
   }
   public void stop(){
-    RightElevMotor.stopMotor();
-    LeftElevMotor.stopMotor();
+    RightAIMotor.stopMotor();
+    LeftAIMotor.stopMotor();
+  }
+  public void hold(){
+    RightAIMotor.set(-0.1);
+    LeftAIMotor.set(0.1);
   }
 }

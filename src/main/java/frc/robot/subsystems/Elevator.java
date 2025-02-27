@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 //SparkMax motor controller
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.RelativeEncoder;
@@ -41,6 +42,15 @@ public class Elevator extends SubsystemBase {
     LeftElevMotorConfig = new SparkMaxConfig();
 
     LeftElevMotorConfig.follow(RightElevMotor, true);
+    
+    RightElevMotorConfig.idleMode(IdleMode.kBrake);
+    LeftElevMotorConfig.idleMode(IdleMode.kBrake);
+
+    RightElevMotorConfig.softLimit.reverseSoftLimit(-45);
+    RightElevMotorConfig.softLimit.reverseSoftLimitEnabled(true);
+
+    RightElevMotorConfig.softLimit.forwardSoftLimit(1);
+    RightElevMotorConfig.softLimit.forwardSoftLimitEnabled(true);
 
     /*
      * Configure the encoder. For this specific example, we are using the
@@ -89,8 +99,8 @@ public class Elevator extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Actual Position", RightEncoder.getPosition());
-    SmartDashboard.putNumber("Actual Velocity", RightEncoder.getVelocity());
+    SmartDashboard.putNumber("Elevator Position", RightEncoder.getPosition());
+    SmartDashboard.putNumber("Elevator Velocity", RightEncoder.getVelocity());
 
     if (SmartDashboard.getBoolean("Reset Encoder", false)) {
       SmartDashboard.putBoolean("Reset Encoder", false);
@@ -102,12 +112,15 @@ public class Elevator extends SubsystemBase {
     //RightClosedLoopController.setReference(targetPosition, ControlType.kPosition, ClosedLoopSlot.kSlot0);
   }
   public void up(){
-    RightElevMotor.set(0.1);
+    RightElevMotor.set(-0.6);
   }
   public void down(){
-    RightElevMotor.set(-0.1);
+    RightElevMotor.set(0.2);
   }
   public void stop(){
     RightElevMotor.stopMotor();
+  }
+  public void hold(){
+    RightElevMotor.set(-0.1);
   }
 }

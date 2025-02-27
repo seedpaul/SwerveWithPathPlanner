@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 //SparkMax motor controller
@@ -53,12 +54,13 @@ public class Climber extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("climber posistion:",m_encoder.getPosition());
   }
-  public void up(){
-      m_motor.set(0.1);
+  public void out(){
+      m_motor.set(.50);
   }
-  public void down(){
-    m_motor.set(-0.1);
+  public void climb(){
+    m_motor.set(-.50);
   }
   public void stop(){
     m_motor.stopMotor();
