@@ -41,59 +41,60 @@ public class Elevator extends SubsystemBase {
     RightElevMotorConfig = new SparkMaxConfig();
     LeftElevMotorConfig = new SparkMaxConfig();
 
-    LeftElevMotorConfig.follow(RightElevMotor, true);
+    LeftElevMotorConfig.follow(RightElevMotor, true);  
+
+    RightElevMotorConfig.voltageCompensation(12);
+    LeftElevMotorConfig.voltageCompensation(12);
+
+    RightElevMotorConfig.smartCurrentLimit(30,60,200);
+    LeftElevMotorConfig.smartCurrentLimit(30,60,200);
+
+    RightElevMotorConfig.inverted(true);
+    LeftElevMotorConfig.inverted(true);
     
     RightElevMotorConfig.idleMode(IdleMode.kBrake);
     LeftElevMotorConfig.idleMode(IdleMode.kBrake);
 
-    RightElevMotorConfig.softLimit.reverseSoftLimit(-45);
-    RightElevMotorConfig.softLimit.reverseSoftLimitEnabled(true);
+    RightEncoder.setPosition(0.0);
+    
+    // RightElevMotorConfig.softLimit.reverseSoftLimit(-45);
+    // RightElevMotorConfig.softLimit.reverseSoftLimitEnabled(true);
 
-    RightElevMotorConfig.softLimit.forwardSoftLimit(1);
-    RightElevMotorConfig.softLimit.forwardSoftLimitEnabled(true);
+    // RightElevMotorConfig.softLimit.forwardSoftLimit(1);
+    // RightElevMotorConfig.softLimit.forwardSoftLimitEnabled(true);
 
-    /*
-     * Configure the encoder. For this specific example, we are using the
-     * integrated encoder of the NEO, and we don't need to configure it. If
-     * needed, we can adjust values like the position or velocity conversion
-     * factors.
-     */
     RightElevMotorConfig.encoder
-        .positionConversionFactor(1)
-        .velocityConversionFactor(1);
+        .positionConversionFactor(.1)
+        .velocityConversionFactor(.1);
 
     LeftElevMotorConfig.encoder
-        .positionConversionFactor(1)
-        .velocityConversionFactor(1);
+        .positionConversionFactor(.1)
+        .velocityConversionFactor(.1);
 
-    /*
-     * Configure the closed loop controller. We want to make sure we set the
-     * feedback sensor as the primary encoder.
-     */
-    RightElevMotorConfig.closedLoop
-        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-        // Set PID values for position control. We don't need to pass a closed loop
-        // slot, as it will default to slot 0.
-        .p(0.1)
-        .i(0)
-        .d(0)
-        .outputRange(-1, 1)
-        // Set PID values for velocity control in slot 1
-        .p(0.0001, ClosedLoopSlot.kSlot1)
-        .i(0, ClosedLoopSlot.kSlot1)
-        .d(0, ClosedLoopSlot.kSlot1)
-        .velocityFF(1.0 / 5767, ClosedLoopSlot.kSlot1)
-        .outputRange(-1, 1, ClosedLoopSlot.kSlot1);
+    // RightElevMotorConfig.closedLoop
+    //     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+    //     // Set PID values for position control. We don't need to pass a closed loop
+    //     // slot, as it will default to slot 0.
+    //     .p(0.1)
+    //     .i(0)
+    //     .d(0)
+    //     .outputRange(-1, 1)
+    //     // Set PID values for velocity control in slot 1
+    //     .p(0.0001, ClosedLoopSlot.kSlot1)
+    //     .i(0, ClosedLoopSlot.kSlot1)
+    //     .d(0, ClosedLoopSlot.kSlot1)
+    //     .velocityFF(1.0 / 5767, ClosedLoopSlot.kSlot1)
+    //     .outputRange(-1, 1, ClosedLoopSlot.kSlot1);  
 
     RightElevMotor.configure(RightElevMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
     LeftElevMotor.configure(LeftElevMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+
 
         // Initialize dashboard values
     SmartDashboard.setDefaultNumber("Target Position", 0);
     SmartDashboard.setDefaultNumber("Target Velocity", 0);
     SmartDashboard.setDefaultBoolean("Control Mode", false);
     SmartDashboard.setDefaultBoolean("Reset Encoder", false);
-
   }
 
   @Override
@@ -112,15 +113,15 @@ public class Elevator extends SubsystemBase {
     //RightClosedLoopController.setReference(targetPosition, ControlType.kPosition, ClosedLoopSlot.kSlot0);
   }
   public void up(){
-    RightElevMotor.set(-0.6);
+    RightElevMotor.set(0.3);
   }
   public void down(){
-    RightElevMotor.set(0.2);
+    RightElevMotor.set(-0.1);
   }
   public void stop(){
     RightElevMotor.stopMotor();
   }
   public void hold(){
-    RightElevMotor.set(-0.1);
+    RightElevMotor.set(0.05);
   }
 }

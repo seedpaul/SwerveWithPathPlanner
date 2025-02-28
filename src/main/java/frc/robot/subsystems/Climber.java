@@ -62,6 +62,10 @@ public class Climber extends SubsystemBase {
   public void climb(){
     m_motor.set(-.50);
   }
+
+  public void hold(){
+    m_motor.set(-.10);
+  }
   public void stop(){
     m_motor.stopMotor();
   }

@@ -20,7 +20,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import frc.robot.generated.TunerConstants;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.*;
 
 public class RobotContainer {
@@ -93,13 +92,13 @@ public class RobotContainer {
         // driverController.start().and(driverController.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
         // reset the field-centric heading on left bumper press
-        //driverController.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+        driverController.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         driverController.x().whileTrue(new InstantCommand(() -> climber.out(), climber));
         driverController.x().onFalse(new InstantCommand(() -> climber.stop(), climber));
 
         driverController.b().whileTrue(new InstantCommand(() -> climber.climb(), climber));
-        driverController.b().onFalse(new InstantCommand(() -> climber.stop(), climber));
+        driverController.b().onFalse(new InstantCommand(() -> climber.hold(), climber));
 
         //driverController.y().whileTrue(new InstantCommand(() -> algaeIntake.in(), algaeIntake));
         //driverController.y().onFalse(new InstantCommand(() -> algaeIntake.hold(), algaeIntake));
@@ -111,13 +110,13 @@ public class RobotContainer {
         driverController.y().onFalse(new InstantCommand(() -> elevator.hold(), elevator));
 
         driverController.a().whileTrue(new InstantCommand(() -> elevator.down(), elevator));
-        driverController.a().onFalse(new InstantCommand(() -> elevator.hold(), elevator));
+        driverController.a().onFalse(new InstantCommand(() -> elevator.stop(), elevator));
 
         driverController.rightBumper().whileTrue(new InstantCommand(() -> coralIntake.in(), coralIntake));
         driverController.rightBumper().onFalse(new InstantCommand(() -> coralIntake.stop(), coralIntake));
         
-        driverController.leftBumper().whileTrue(new InstantCommand(() -> coralIntake.out(), coralIntake));
-        driverController.leftBumper().onFalse(new InstantCommand(() -> coralIntake.stop(), coralIntake));
+        // driverController.leftBumper().whileTrue(new InstantCommand(() -> coralIntake.out(), coralIntake));
+        // driverController.leftBumper().onFalse(new InstantCommand(() -> coralIntake.stop(), coralIntake));
 
         driverController.button(7).whileTrue(new InstantCommand(() -> algaeElbow.down(), algaeElbow));
         driverController.button(7).onFalse(new InstantCommand(() -> algaeElbow.stop(), algaeElbow));
