@@ -113,7 +113,7 @@ public class Elevator extends SubsystemBase {
     //RightClosedLoopController.setReference(targetPosition, ControlType.kPosition, ClosedLoopSlot.kSlot0);
   }
   public void up(){
-    RightElevMotor.set(0.3);
+    RightElevMotor.set(0.2);
   }
   public void down(){
     RightElevMotor.set(-0.1);

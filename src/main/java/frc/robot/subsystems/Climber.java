@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 //SparkMax motor controller
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.RelativeEncoder;
@@ -31,6 +32,20 @@ public class Climber extends SubsystemBase {
     m_controller = m_motor.getClosedLoopController();
     m_encoder = m_motor.getEncoder();
     m_motorConfig = new SparkMaxConfig();
+
+    m_motorConfig = new SparkMaxConfig();
+    m_motorConfig.voltageCompensation(12);
+    m_motorConfig.smartCurrentLimit(80,120,20);
+    m_motorConfig.inverted(true);
+    m_motorConfig.idleMode(IdleMode.kBrake);
+
+    m_motorConfig.softLimit.reverseSoftLimit(0);
+    m_motorConfig.softLimit.reverseSoftLimitEnabled(true);
+
+    m_motorConfig.softLimit.forwardSoftLimit(110);
+    m_motorConfig.softLimit.forwardSoftLimitEnabled(true);
+
+    m_encoder.setPosition(0.0);
 
     // m_motorConfig.closedLoop
     //   .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
@@ -57,10 +72,10 @@ public class Climber extends SubsystemBase {
     SmartDashboard.putNumber("climber posistion:",m_encoder.getPosition());
   }
   public void out(){
-      m_motor.set(.50);
+      m_motor.set(-.50);
   }
   public void climb(){
-    m_motor.set(-.50);
+    m_motor.set(.50);
   }
 
   public void hold(){

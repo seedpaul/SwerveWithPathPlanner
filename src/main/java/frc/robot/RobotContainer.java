@@ -96,50 +96,44 @@ public class RobotContainer {
         /**********************         DRIVER CONROLLER                ******************************/                          
         driverController.button(7).onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
-        driverController.x().whileTrue(new InstantCommand(() -> climber.out(), climber));
-        driverController.x().onFalse(new InstantCommand(() -> climber.stop(), climber));
+        //driverController.x().whileTrue(new InstantCommand(() -> climber.out(), climber));
+        //driverController.x().onFalse(new InstantCommand(() -> climber.stop(), climber));
 
         driverController.b().whileTrue(new InstantCommand(() -> climber.climb(), climber));
-        driverController.b().onFalse(new InstantCommand(() -> climber.hold(), climber));
+        driverController.b().onFalse(new InstantCommand(() -> climber.stop(), climber));
 
         driverController.a().whileTrue(new InstantCommand(() -> algaeElbow.down(), algaeElbow));
-        driverController.a().onFalse(new InstantCommand(() -> algaeElbow.stop(), algaeElbow));
+        //driverController.a().onFalse(new InstantCommand(() -> algaeElbow.stop(), algaeElbow));
 
         driverController.y().whileTrue(new InstantCommand(() -> algaeElbow.up(), algaeElbow));
-        driverController.y().onFalse(new InstantCommand(() -> algaeElbow.stop(), algaeElbow));
+        //driverController.y().onFalse(new InstantCommand(() -> algaeElbow.stop(), algaeElbow));
 
-        driverController.rightBumper().whileTrue(new InstantCommand(() -> coralElbow.down(), coralElbow));
-        driverController.rightBumper().onFalse(new InstantCommand(() -> coralElbow.stop(), coralElbow));
+        driverController.rightBumper().whileTrue(new InstantCommand(() -> algaeIntake.in(), algaeIntake));
+        driverController.rightBumper().onFalse(new InstantCommand(() -> algaeIntake.hold(), algaeIntake));
 
-        driverController.leftBumper().whileTrue(new InstantCommand(() -> coralElbow.up(), coralElbow));
-        driverController.leftBumper().onFalse(new InstantCommand(() -> coralElbow.stop(), coralElbow));
+        driverController.leftBumper().whileTrue(new InstantCommand(() -> algaeIntake.out(), algaeIntake));
+        driverController.leftBumper().onFalse(new InstantCommand(() -> algaeIntake.stop(), algaeIntake));
         /*********************************************************************************************/
 
         /*********************************************************************************************/
         /**********************         OPERATOR CONROLLER              ******************************/ 
-        operatorController.x().whileTrue(new InstantCommand(() -> algaeIntake.in(), algaeIntake));
-        operatorController.x().onFalse(new InstantCommand(() -> algaeIntake.hold(), algaeIntake));
+        operatorController.x().whileTrue(new InstantCommand(() -> elevator.up(), elevator));
+        operatorController.x().onFalse(new InstantCommand(() -> elevator.hold(), elevator));
 
-        operatorController.b().whileTrue(new InstantCommand(() -> algaeIntake.out(), algaeIntake));
-        operatorController.b().onFalse(new InstantCommand(() -> algaeIntake.stop(), algaeIntake));
+        operatorController.b().whileTrue(new InstantCommand(() -> elevator.down(), elevator));
+        operatorController.b().onFalse(new InstantCommand(() -> elevator.stop(), elevator));
 
-        operatorController.y().whileTrue(new InstantCommand(() -> elevator.up(), elevator));
-        operatorController.y().onFalse(new InstantCommand(() -> elevator.hold(), elevator));
+        operatorController.a().whileTrue(new InstantCommand(() -> coralElbow.down(), coralElbow));
+        //operatorController.a().onFalse(new InstantCommand(() -> coralElbow.stop(), coralElbow));
 
-        operatorController.a().whileTrue(new InstantCommand(() -> elevator.down(), elevator));
-        operatorController.a().onFalse(new InstantCommand(() -> elevator.stop(), elevator));
+        operatorController.y().whileTrue(new InstantCommand(() -> coralElbow.up(), coralElbow));
+        //operatorController.y().onFalse(new InstantCommand(() -> coralElbow.stop(), coralElbow));
 
         operatorController.rightBumper().whileTrue(new InstantCommand(() -> coralIntake.in(), coralIntake));
         operatorController.rightBumper().onFalse(new InstantCommand(() -> coralIntake.stop(), coralIntake));
 
         operatorController.leftBumper().whileTrue(new InstantCommand(() -> coralIntake.out(), coralIntake));
         operatorController.leftBumper().onFalse(new InstantCommand(() -> coralIntake.stop(), coralIntake));
-
-        //operatorController.button(7).whileTrue(new InstantCommand(() -> algaeElbow.down(), algaeElbow));
-        //operatorController.button(7).onFalse(new InstantCommand(() -> algaeElbow.stop(), algaeElbow));
-
-        //operatorController.button(8).whileTrue(new InstantCommand(() -> coralElbow.down(), coralElbow));
-        //operatorController.button(8).onFalse(new InstantCommand(() -> coralElbow.stop(), coralElbow));
         /***************************************************************************************************** */
 
         drivetrain.registerTelemetry(logger::telemeterize);

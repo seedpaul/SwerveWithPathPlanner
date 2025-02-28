@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
@@ -12,6 +13,7 @@ import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkBase.ControlType;
 
 public class CoralElbow extends SubsystemBase {
   private static final int deviceID = 4;
@@ -20,6 +22,7 @@ public class CoralElbow extends SubsystemBase {
   private RelativeEncoder m_encoder;
   private SparkMaxConfig m_motorConfig;
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
+  private double targetPosition = 0;
   /** Creates a new Climber. */
   public CoralElbow() {
 
@@ -28,7 +31,19 @@ public class CoralElbow extends SubsystemBase {
     m_encoder = m_motor.getEncoder();
     m_motorConfig = new SparkMaxConfig();
 
+    m_motorConfig = new SparkMaxConfig();
+    m_motorConfig.voltageCompensation(12);
+    m_motorConfig.smartCurrentLimit(30,60,200);
+    m_motorConfig.inverted(true);
     m_motorConfig.idleMode(IdleMode.kBrake);
+
+    m_motorConfig.softLimit.reverseSoftLimit(-18);
+    m_motorConfig.softLimit.reverseSoftLimitEnabled(true);
+
+    m_motorConfig.softLimit.forwardSoftLimit(0);
+    m_motorConfig.softLimit.forwardSoftLimitEnabled(true);
+
+    m_encoder.setPosition(0.0);
 
     m_motorConfig.closedLoop
       .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
@@ -37,7 +52,7 @@ public class CoralElbow extends SubsystemBase {
       .p(0.1)
       .i(0)
       .d(0)
-      .outputRange(-1, 1)
+      .outputRange(-0.5, .5)
       // Set PID values for velocity control in slot 1
       .p(0.0001, ClosedLoopSlot.kSlot1)
       .i(0, ClosedLoopSlot.kSlot1)
@@ -52,12 +67,18 @@ public class CoralElbow extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("coral elbow Position", m_encoder.getPosition());
+
+    m_controller.setReference(targetPosition, ControlType.kPosition, ClosedLoopSlot.kSlot0);
   }
   public void up(){
-    m_motor.set(-0.3);
+    //m_motor.set(0.3);
+    targetPosition = 0;
+  
   }
   public void down(){
-    m_motor.set(0.3);
+    //m_motor.set(-0.3);
+    targetPosition = -25;
   }
   public void stop(){
     m_motor.stopMotor();
