@@ -42,8 +42,8 @@ public class AlgaeIntake extends SubsystemBase {
     LeftAIMotor.set(0.75);
   }
   public void out(){
-    RightAIMotor.set(0.75);
-    LeftAIMotor.set(-0.75);
+    RightAIMotor.set(1);
+    LeftAIMotor.set(-1);
   }
   public void stop(){
     RightAIMotor.stopMotor();
