@@ -29,6 +29,8 @@ public class Elevator extends SubsystemBase {
   private SparkClosedLoopController RightClosedLoopController;
   private RelativeEncoder RightEncoder;
 
+  private double targetPosition = 0;
+
   /** Creates a new Elevator. */
   public Elevator() {
 
@@ -46,8 +48,8 @@ public class Elevator extends SubsystemBase {
     RightElevMotorConfig.voltageCompensation(12);
     LeftElevMotorConfig.voltageCompensation(12);
 
-    RightElevMotorConfig.smartCurrentLimit(30,60,200);
-    LeftElevMotorConfig.smartCurrentLimit(30,60,200);
+    RightElevMotorConfig.smartCurrentLimit(30,100,20);
+    LeftElevMotorConfig.smartCurrentLimit(30,100,20);
 
     RightElevMotorConfig.inverted(true);
     LeftElevMotorConfig.inverted(true);
@@ -55,68 +57,76 @@ public class Elevator extends SubsystemBase {
     RightElevMotorConfig.idleMode(IdleMode.kBrake);
     LeftElevMotorConfig.idleMode(IdleMode.kBrake);
 
+    RightElevMotorConfig.closedLoopRampRate(4);
+    LeftElevMotorConfig.closedLoopRampRate(4);
+
     RightEncoder.setPosition(0.0);
     
-    // RightElevMotorConfig.softLimit.reverseSoftLimit(-45);
-    // RightElevMotorConfig.softLimit.reverseSoftLimitEnabled(true);
+    RightElevMotorConfig.softLimit.reverseSoftLimit(0);
+    RightElevMotorConfig.softLimit.reverseSoftLimitEnabled(true);
 
-    // RightElevMotorConfig.softLimit.forwardSoftLimit(1);
-    // RightElevMotorConfig.softLimit.forwardSoftLimitEnabled(true);
+    RightElevMotorConfig.softLimit.forwardSoftLimit(45);
+    RightElevMotorConfig.softLimit.forwardSoftLimitEnabled(true);
 
-    RightElevMotorConfig.encoder
-        .positionConversionFactor(.1)
-        .velocityConversionFactor(.1);
+    RightElevMotorConfig.encoder.positionConversionFactor(1);
+    RightElevMotorConfig.encoder.velocityConversionFactor(1);
+    LeftElevMotorConfig.encoder.positionConversionFactor(1);
+    LeftElevMotorConfig.encoder.velocityConversionFactor(1);
 
-    LeftElevMotorConfig.encoder
-        .positionConversionFactor(.1)
-        .velocityConversionFactor(.1);
+    RightElevMotorConfig.closedLoop
+        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+        // Set PID values for position control. We don't need to pass a closed loop
+        // slot, as it will default to slot 0.
+        .p(0.4)
+        .i(0)
+        .d(0)
+        .outputRange(-1, 1)
+        // Set PID values for velocity control in slot 1
+        .p(0.0001, ClosedLoopSlot.kSlot1)
+        .i(0, ClosedLoopSlot.kSlot1)
+        .d(0, ClosedLoopSlot.kSlot1)
+        .velocityFF(1.0 / 5767, ClosedLoopSlot.kSlot1)
+        .outputRange(-1, 1, ClosedLoopSlot.kSlot1);  
 
-    // RightElevMotorConfig.closedLoop
-    //     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-    //     // Set PID values for position control. We don't need to pass a closed loop
-    //     // slot, as it will default to slot 0.
-    //     .p(0.1)
-    //     .i(0)
-    //     .d(0)
-    //     .outputRange(-1, 1)
-    //     // Set PID values for velocity control in slot 1
-    //     .p(0.0001, ClosedLoopSlot.kSlot1)
-    //     .i(0, ClosedLoopSlot.kSlot1)
-    //     .d(0, ClosedLoopSlot.kSlot1)
-    //     .velocityFF(1.0 / 5767, ClosedLoopSlot.kSlot1)
-    //     .outputRange(-1, 1, ClosedLoopSlot.kSlot1);  
+    RightElevMotorConfig.closedLoop.maxMotion
+      // Set MAXMotion parameters for position control. We don't need to pass
+      // a closed loop slot, as it will default to slot 0.
+      .maxVelocity(250)
+      .maxAcceleration(500)
+      .allowedClosedLoopError(1)
+      // Set MAXMotion parameters for velocity control in slot 1
+      .maxAcceleration(500, ClosedLoopSlot.kSlot1)
+      .maxVelocity(6000, ClosedLoopSlot.kSlot1)
+      .allowedClosedLoopError(1, ClosedLoopSlot.kSlot1);
 
     RightElevMotor.configure(RightElevMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
     LeftElevMotor.configure(LeftElevMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
-
-        // Initialize dashboard values
-    SmartDashboard.setDefaultNumber("Target Position", 0);
+    SmartDashboard.setDefaultNumber("Target Position", targetPosition);
     SmartDashboard.setDefaultNumber("Target Velocity", 0);
-    SmartDashboard.setDefaultBoolean("Control Mode", false);
-    SmartDashboard.setDefaultBoolean("Reset Encoder", false);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Elevator Position", RightEncoder.getPosition());
-    SmartDashboard.putNumber("Elevator Velocity", RightEncoder.getVelocity());
+    SmartDashboard.putNumber("elevator Actual Position", RightEncoder.getPosition());
+    SmartDashboard.putNumber("elevator Actual Velocity", RightEncoder.getVelocity());
+    SmartDashboard.putNumber("Target Position", targetPosition);
 
-    if (SmartDashboard.getBoolean("Reset Encoder", false)) {
-      SmartDashboard.putBoolean("Reset Encoder", false);
-      // Reset the encoder position to 0
-      RightEncoder.setPosition(0);
-    }
-
-    double targetPosition = SmartDashboard.getNumber("Target Position", 0);
-    //RightClosedLoopController.setReference(targetPosition, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+    //double targetPosition = SmartDashboard.getNumber("Target Position", 0);
+    RightClosedLoopController.setReference(targetPosition, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
   }
   public void up(){
-    RightElevMotor.set(0.2);
+    if(targetPosition <= 40){
+      targetPosition +=5;
+    }
+    //RightElevMotor.set(0.2);
   }
   public void down(){
-    RightElevMotor.set(-0.1);
+    if(targetPosition >= 5){
+      targetPosition -=5;
+    }
+    //RightElevMotor.set(-0.1);
   }
   public void stop(){
     RightElevMotor.stopMotor();

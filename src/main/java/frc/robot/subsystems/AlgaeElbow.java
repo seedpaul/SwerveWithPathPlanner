@@ -36,11 +36,12 @@ public class AlgaeElbow extends SubsystemBase {
     m_motorConfig.smartCurrentLimit(30,60,200);
     m_motorConfig.inverted(false);
     m_motorConfig.idleMode(IdleMode.kBrake);
+    m_motorConfig.closedLoopRampRate(3);
 
-    m_motorConfig.softLimit.reverseSoftLimit(0);
+    m_motorConfig.softLimit.reverseSoftLimit(-38.0);
     m_motorConfig.softLimit.reverseSoftLimitEnabled(true);
 
-    m_motorConfig.softLimit.forwardSoftLimit(14.5);
+    m_motorConfig.softLimit.forwardSoftLimit(0);
     m_motorConfig.softLimit.forwardSoftLimitEnabled(true);
 
     m_encoder.setPosition(0.0);
@@ -72,11 +73,11 @@ public class AlgaeElbow extends SubsystemBase {
   }
   public void up(){
     //m_motor.set(0.3);
-    targetPosition = 14.5;
+    targetPosition = 0.0;
   }
   public void down(){
     //m_motor.set(-0.3);
-    targetPosition = 0;
+    targetPosition = -38.0;
   }
   public void stop(){
     m_motor.stopMotor();

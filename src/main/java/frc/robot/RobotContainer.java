@@ -54,7 +54,7 @@ public class RobotContainer {
     private final SendableChooser<Command> autoChooser;
 
     public RobotContainer() {
-        autoChooser = AutoBuilder.buildAutoChooser("Tests");
+        autoChooser = AutoBuilder.buildAutoChooser("SimpleAuto");
         SmartDashboard.putData("Auto Mode", autoChooser);
 
         configureBindings();
@@ -103,10 +103,10 @@ public class RobotContainer {
         driverController.b().onFalse(new InstantCommand(() -> climber.stop(), climber));
 
         driverController.a().whileTrue(new InstantCommand(() -> algaeElbow.down(), algaeElbow));
-        //driverController.a().onFalse(new InstantCommand(() -> algaeElbow.stop(), algaeElbow));
+        driverController.a().onFalse(new InstantCommand(() -> algaeElbow.stop(), algaeElbow));
 
         driverController.y().whileTrue(new InstantCommand(() -> algaeElbow.up(), algaeElbow));
-        //driverController.y().onFalse(new InstantCommand(() -> algaeElbow.stop(), algaeElbow));
+        driverController.y().onFalse(new InstantCommand(() -> algaeElbow.stop(), algaeElbow));
 
         driverController.rightBumper().whileTrue(new InstantCommand(() -> algaeIntake.in(), algaeIntake));
         driverController.rightBumper().onFalse(new InstantCommand(() -> algaeIntake.hold(), algaeIntake));
@@ -118,7 +118,7 @@ public class RobotContainer {
         /*********************************************************************************************/
         /**********************         OPERATOR CONROLLER              ******************************/ 
         operatorController.x().whileTrue(new InstantCommand(() -> elevator.up(), elevator));
-        operatorController.x().onFalse(new InstantCommand(() -> elevator.hold(), elevator));
+        operatorController.x().onFalse(new InstantCommand(() -> elevator.stop(), elevator));
 
         operatorController.b().whileTrue(new InstantCommand(() -> elevator.down(), elevator));
         operatorController.b().onFalse(new InstantCommand(() -> elevator.stop(), elevator));

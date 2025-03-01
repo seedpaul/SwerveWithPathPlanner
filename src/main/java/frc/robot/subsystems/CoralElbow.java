@@ -36,8 +36,9 @@ public class CoralElbow extends SubsystemBase {
     m_motorConfig.smartCurrentLimit(30,60,200);
     m_motorConfig.inverted(true);
     m_motorConfig.idleMode(IdleMode.kBrake);
+    m_motorConfig.closedLoopRampRate(4);
 
-    m_motorConfig.softLimit.reverseSoftLimit(-18);
+    m_motorConfig.softLimit.reverseSoftLimit(-27);
     m_motorConfig.softLimit.reverseSoftLimitEnabled(true);
 
     m_motorConfig.softLimit.forwardSoftLimit(0);
@@ -49,10 +50,10 @@ public class CoralElbow extends SubsystemBase {
       .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
       // Set PID values for position control. We don't need to pass a closed loop
       // slot, as it will default to slot 0.
-      .p(0.1)
+      .p(0.025)
       .i(0)
       .d(0)
-      .outputRange(-0.5, .5)
+      .outputRange(-0.4, .4)
       // Set PID values for velocity control in slot 1
       .p(0.0001, ClosedLoopSlot.kSlot1)
       .i(0, ClosedLoopSlot.kSlot1)
@@ -72,13 +73,16 @@ public class CoralElbow extends SubsystemBase {
     m_controller.setReference(targetPosition, ControlType.kPosition, ClosedLoopSlot.kSlot0);
   }
   public void up(){
-    //m_motor.set(0.3);
-    targetPosition = 0;
-  
+
+    if(targetPosition <= -9){
+      targetPosition = targetPosition + 9; 
+    }
+   
   }
   public void down(){
-    //m_motor.set(-0.3);
-    targetPosition = -25;
+    if(targetPosition >= -18){
+      targetPosition = targetPosition - 9; 
+    }
   }
   public void stop(){
     m_motor.stopMotor();
