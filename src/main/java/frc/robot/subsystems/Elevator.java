@@ -65,7 +65,7 @@ public class Elevator extends SubsystemBase {
     RightElevMotorConfig.softLimit.reverseSoftLimit(0);
     RightElevMotorConfig.softLimit.reverseSoftLimitEnabled(true);
 
-    RightElevMotorConfig.softLimit.forwardSoftLimit(45);
+    RightElevMotorConfig.softLimit.forwardSoftLimit(40);
     RightElevMotorConfig.softLimit.forwardSoftLimitEnabled(true);
 
     RightElevMotorConfig.encoder.positionConversionFactor(1);
@@ -77,9 +77,9 @@ public class Elevator extends SubsystemBase {
         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
         // Set PID values for position control. We don't need to pass a closed loop
         // slot, as it will default to slot 0.
-        .p(0.4)
+        .p(0.6)
         .i(0)
-        .d(0)
+        .d(0.0)
         .outputRange(-1, 1)
         // Set PID values for velocity control in slot 1
         .p(0.0001, ClosedLoopSlot.kSlot1)
@@ -91,8 +91,8 @@ public class Elevator extends SubsystemBase {
     RightElevMotorConfig.closedLoop.maxMotion
       // Set MAXMotion parameters for position control. We don't need to pass
       // a closed loop slot, as it will default to slot 0.
-      .maxVelocity(250)
-      .maxAcceleration(500)
+      .maxVelocity(400)
+      .maxAcceleration(700)
       .allowedClosedLoopError(1)
       // Set MAXMotion parameters for velocity control in slot 1
       .maxAcceleration(500, ClosedLoopSlot.kSlot1)
@@ -102,8 +102,7 @@ public class Elevator extends SubsystemBase {
     RightElevMotor.configure(RightElevMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
     LeftElevMotor.configure(LeftElevMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
-    SmartDashboard.setDefaultNumber("Target Position", targetPosition);
-    SmartDashboard.setDefaultNumber("Target Velocity", 0);
+    SmartDashboard.putNumber("elevator Target Position", targetPosition);
   }
 
   @Override
@@ -111,13 +110,13 @@ public class Elevator extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("elevator Actual Position", RightEncoder.getPosition());
     SmartDashboard.putNumber("elevator Actual Velocity", RightEncoder.getVelocity());
-    SmartDashboard.putNumber("Target Position", targetPosition);
+    SmartDashboard.putNumber("elevator Target Position", targetPosition);
 
     //double targetPosition = SmartDashboard.getNumber("Target Position", 0);
     RightClosedLoopController.setReference(targetPosition, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
   }
   public void up(){
-    if(targetPosition <= 40){
+    if(targetPosition <= 35){
       targetPosition +=5;
     }
     //RightElevMotor.set(0.2);
