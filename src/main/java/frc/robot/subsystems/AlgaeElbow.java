@@ -83,6 +83,9 @@ public class AlgaeElbow extends SubsystemBase {
       goingDown = false;
       hitBottom = true;
     }
+
+    
+    SmartDashboard.putNumber("Velocity", m_encoder.getVelocity());
     SmartDashboard.putBoolean("Hit Bottom", hitBottom);
     m_controller.setReference(targetPosition, ControlType.kPosition, ClosedLoopSlot.kSlot0);
 
