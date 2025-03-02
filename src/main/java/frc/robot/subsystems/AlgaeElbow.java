@@ -70,6 +70,10 @@ public class AlgaeElbow extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("algae elbow Position", m_encoder.getPosition());
     m_controller.setReference(targetPosition, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+    SmartDashboard.putNumber("AE applied output",m_motor.getAppliedOutput());
+    SmartDashboard.putNumber("AE bus voltage",m_motor.getBusVoltage());
+    SmartDashboard.putNumber("AE output current",m_motor.getOutputCurrent());
+
   }
   public void up(){
     //m_motor.set(0.3);
