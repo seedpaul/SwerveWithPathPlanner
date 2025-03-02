@@ -23,7 +23,9 @@ public class AlgaeElbow extends SubsystemBase {
   private SparkMaxConfig m_motorConfig;
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
   private double targetPosition = 0;
-  /** Creates a new Climber. */
+  boolean goingDown = false;
+
+  /** Creates a new AlgaeElbow. */
   public AlgaeElbow() {
 
     m_motor = new SparkMax(deviceID, MotorType.kBrushless);
@@ -38,7 +40,7 @@ public class AlgaeElbow extends SubsystemBase {
     m_motorConfig.idleMode(IdleMode.kBrake);
     m_motorConfig.closedLoopRampRate(3);
 
-    m_motorConfig.softLimit.reverseSoftLimit(-40.0);
+    m_motorConfig.softLimit.reverseSoftLimit(-76.0);
     m_motorConfig.softLimit.reverseSoftLimitEnabled(true);
 
     m_motorConfig.softLimit.forwardSoftLimit(0);
@@ -67,21 +69,33 @@ public class AlgaeElbow extends SubsystemBase {
 
   @Override
   public void periodic() {
+
+    boolean hitBottom = false;
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("algae elbow Position", m_encoder.getPosition());
-    m_controller.setReference(targetPosition, ControlType.kPosition, ClosedLoopSlot.kSlot0);
     SmartDashboard.putNumber("AE applied output",m_motor.getAppliedOutput());
     SmartDashboard.putNumber("AE bus voltage",m_motor.getBusVoltage());
     SmartDashboard.putNumber("AE output current",m_motor.getOutputCurrent());
+
+    if(goingDown && m_motor.getAppliedOutput() > 0.0){
+      targetPosition = -38.0;
+      m_encoder.setPosition(-38.0);
+      goingDown = false;
+      hitBottom = true;
+    }
+    SmartDashboard.putBoolean("Hit Bottom", hitBottom);
+    m_controller.setReference(targetPosition, ControlType.kPosition, ClosedLoopSlot.kSlot0);
 
   }
   public void up(){
     //m_motor.set(0.3);
     targetPosition = 0.0;
+    goingDown = false;
   }
   public void down(){
     //m_motor.set(-0.3);
-    targetPosition = -38.0;
+    targetPosition = -76.0; 
+    goingDown = true;
   }
   public void stop(){
     m_motor.stopMotor();
