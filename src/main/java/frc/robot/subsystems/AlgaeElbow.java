@@ -24,6 +24,7 @@ public class AlgaeElbow extends SubsystemBase {
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
   private double targetPosition = 0;
   boolean goingDown = false;
+  double currentVelo = 0.0;
 
   /** Creates a new AlgaeElbow. */
   public AlgaeElbow() {
@@ -70,6 +71,9 @@ public class AlgaeElbow extends SubsystemBase {
   @Override
   public void periodic() {
 
+    double previousVelo = currentVelo;
+    previousVelo = m_encoder.getVelocity();
+
     boolean hitBottom = false;
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("algae elbow Position", m_encoder.getPosition());
@@ -77,7 +81,7 @@ public class AlgaeElbow extends SubsystemBase {
     SmartDashboard.putNumber("AE bus voltage",m_motor.getBusVoltage());
     SmartDashboard.putNumber("AE output current",m_motor.getOutputCurrent());
 
-    if(goingDown && m_motor.getAppliedOutput() > 0.0){
+    if(goingDown && currentVelo > previousVelo){
       targetPosition = -38.0;
       m_encoder.setPosition(-38.0);
       goingDown = false;
