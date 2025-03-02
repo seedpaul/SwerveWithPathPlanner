@@ -38,7 +38,7 @@ public class AlgaeElbow extends SubsystemBase {
     m_motorConfig.idleMode(IdleMode.kBrake);
     m_motorConfig.closedLoopRampRate(3);
 
-    m_motorConfig.softLimit.reverseSoftLimit(-38.0);
+    m_motorConfig.softLimit.reverseSoftLimit(-40.0);
     m_motorConfig.softLimit.reverseSoftLimitEnabled(true);
 
     m_motorConfig.softLimit.forwardSoftLimit(0);
