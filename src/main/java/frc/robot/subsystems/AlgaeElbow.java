@@ -23,8 +23,8 @@ public class AlgaeElbow extends SubsystemBase {
   private SparkMaxConfig m_motorConfig;
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
   private double targetPosition = 0;
-  boolean goingDown = false;
-  double currentVelo = 0.0;
+  //boolean goingDown = false;
+  //double currentVelo = 0.0;
 
   /** Creates a new AlgaeElbow. */
   public AlgaeElbow() {
@@ -41,7 +41,7 @@ public class AlgaeElbow extends SubsystemBase {
     m_motorConfig.idleMode(IdleMode.kBrake);
     m_motorConfig.closedLoopRampRate(3);
 
-    m_motorConfig.softLimit.reverseSoftLimit(-76.0);
+    m_motorConfig.softLimit.reverseSoftLimit(-38.0);
     m_motorConfig.softLimit.reverseSoftLimitEnabled(true);
 
     m_motorConfig.softLimit.forwardSoftLimit(0);
@@ -71,8 +71,8 @@ public class AlgaeElbow extends SubsystemBase {
   @Override
   public void periodic() {
 
-    double previousVelo = currentVelo;
-    previousVelo = m_encoder.getVelocity();
+    //double previousVelo = currentVelo;
+    //currentVelo = m_encoder.getVelocity();
 
     boolean hitBottom = false;
     // This method will be called once per scheduler run
@@ -81,12 +81,12 @@ public class AlgaeElbow extends SubsystemBase {
     SmartDashboard.putNumber("AE bus voltage",m_motor.getBusVoltage());
     SmartDashboard.putNumber("AE output current",m_motor.getOutputCurrent());
 
-    if(goingDown && currentVelo > previousVelo){
-      targetPosition = -38.0;
-      m_encoder.setPosition(-38.0);
-      goingDown = false;
-      hitBottom = true;
-    }
+    // if(goingDown && currentVelo > previousVelo){
+    //   targetPosition = -38.0;
+    //   m_encoder.setPosition(-38.0);
+    //   goingDown = false;
+    //   hitBottom = true;
+    // }
 
     
     SmartDashboard.putNumber("Velocity", m_encoder.getVelocity());
@@ -97,12 +97,12 @@ public class AlgaeElbow extends SubsystemBase {
   public void up(){
     //m_motor.set(0.3);
     targetPosition = 0.0;
-    goingDown = false;
+    //goingDown = false;
   }
   public void down(){
     //m_motor.set(-0.3);
-    targetPosition = -76.0; 
-    goingDown = true;
+    targetPosition = -38.0; 
+    //goingDown = true;
   }
   public void stop(){
     m_motor.stopMotor();
