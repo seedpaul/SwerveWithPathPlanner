@@ -42,7 +42,7 @@ public class Climber extends SubsystemBase {
     m_motorConfig.softLimit.reverseSoftLimit(0);
     m_motorConfig.softLimit.reverseSoftLimitEnabled(true);
 
-    m_motorConfig.softLimit.forwardSoftLimit(110);
+    m_motorConfig.softLimit.forwardSoftLimit(120);
     m_motorConfig.softLimit.forwardSoftLimitEnabled(true);
 
     m_encoder.setPosition(0.0);

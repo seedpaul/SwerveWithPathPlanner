@@ -77,27 +77,28 @@ public class Elevator extends SubsystemBase {
         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
         // Set PID values for position control. We don't need to pass a closed loop
         // slot, as it will default to slot 0.
-        .p(0.6)
-        .i(0)
-        .d(0.0)
-        .outputRange(-1, 1)
+        // .p(0.1)
+        // .i(0)
+        // .d(0.5)
+        .pidf(0.65, 0.0, 0.5, .0135)
+        .outputRange(-1, 1);
         // Set PID values for velocity control in slot 1
-        .p(0.0001, ClosedLoopSlot.kSlot1)
-        .i(0, ClosedLoopSlot.kSlot1)
-        .d(0, ClosedLoopSlot.kSlot1)
-        .velocityFF(1.0 / 5767, ClosedLoopSlot.kSlot1)
-        .outputRange(-1, 1, ClosedLoopSlot.kSlot1);  
+        // .p(0.0001, ClosedLoopSlot.kSlot1)
+        // .i(0, ClosedLoopSlot.kSlot1)
+        // .d(0, ClosedLoopSlot.kSlot1)
+        // .velocityFF(1.0 / 5767, ClosedLoopSlot.kSlot1)
+        // .outputRange(-1, 1, ClosedLoopSlot.kSlot1);  
 
     RightElevMotorConfig.closedLoop.maxMotion
       // Set MAXMotion parameters for position control. We don't need to pass
       // a closed loop slot, as it will default to slot 0.
-      .maxVelocity(400)
-      .maxAcceleration(700)
-      .allowedClosedLoopError(1)
+      .maxVelocity(300)
+      .maxAcceleration(600)
+      .allowedClosedLoopError(1);
       // Set MAXMotion parameters for velocity control in slot 1
-      .maxAcceleration(500, ClosedLoopSlot.kSlot1)
-      .maxVelocity(6000, ClosedLoopSlot.kSlot1)
-      .allowedClosedLoopError(1, ClosedLoopSlot.kSlot1);
+      // .maxAcceleration(500, ClosedLoopSlot.kSlot1)
+      // .maxVelocity(6000, ClosedLoopSlot.kSlot1)
+      // .allowedClosedLoopError(1, ClosedLoopSlot.kSlot1);
 
     RightElevMotor.configure(RightElevMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
     LeftElevMotor.configure(LeftElevMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
@@ -113,24 +114,39 @@ public class Elevator extends SubsystemBase {
     SmartDashboard.putNumber("elevator Target Position", targetPosition);
 
     //double targetPosition = SmartDashboard.getNumber("Target Position", 0);
-    RightClosedLoopController.setReference(targetPosition, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+    //RightClosedLoopController.setReference(targetPosition, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
   }
   public void up(){
-    if(targetPosition <= 35){
-      targetPosition +=5;
+    if(targetPosition <= 39.95){
+      //targetPosition +=0.2;
+      targetPosition = (double) Math.round((targetPosition +=0.05) * 100) / 100;
     }
-    //RightElevMotor.set(0.2);
+    else{
+      targetPosition = 40;
+    }
   }
   public void down(){
-    if(targetPosition >= 5){
-      targetPosition -=5;
+    if(targetPosition >= 0.05){
+      //targetPosition -=0.2;
+      targetPosition = (double) Math.round((targetPosition -=0.05) * 100) / 100;
     }
-    //RightElevMotor.set(-0.1);
+    else{
+      targetPosition = 0;
+    }
   }
   public void stop(){
     RightElevMotor.stopMotor();
+    //targetPosition = (double) Math.round(targetPosition * 100) / 100;
   }
   public void hold(){
     RightElevMotor.set(0.05);
   }
+
+  public void upManual() {
+    RightElevMotor.set(0.3);
+  }
+
+public void downManual() {
+    RightElevMotor.set(-0.2);
+}
 }
