@@ -48,9 +48,9 @@ public class RobotContainer {
     public final Elevator elevator = new Elevator();
     private final Climber climber = new Climber();
     private final AlgaeIntake algaeIntake = new AlgaeIntake();
-    private final CoralIntake coralIntake = new CoralIntake();
+    //private final CoralIntake coralIntake = new CoralIntake();
     private final AlgaeElbow algaeElbow = new AlgaeElbow();
-    private final CoralElbow coralElbow = new CoralElbow();
+    //private final CoralElbow coralElbow = new CoralElbow();
 
     /* Path follower */
     private final SendableChooser<Command> autoChooser;
@@ -127,17 +127,17 @@ public class RobotContainer {
         operatorController.b().whileTrue(new InstantCommand(() -> elevator.downManual(), elevator));
         operatorController.b().onFalse(new InstantCommand(() -> elevator.stop(), elevator));
 
-        operatorController.a().whileTrue(new InstantCommand(() -> coralElbow.down(), coralElbow));
+        //operatorController.a().whileTrue(new InstantCommand(() -> coralElbow.down(), coralElbow));
         //operatorController.a().onFalse(new InstantCommand(() -> coralElbow.stop(), coralElbow));
 
-        operatorController.y().whileTrue(new InstantCommand(() -> coralElbow.up(), coralElbow));
+        //operatorController.y().whileTrue(new InstantCommand(() -> coralElbow.up(), coralElbow));
         //operatorController.y().onFalse(new InstantCommand(() -> coralElbow.stop(), coralElbow));
 
-        operatorController.rightBumper().whileTrue(new InstantCommand(() -> coralIntake.in(), coralIntake));
-        operatorController.rightBumper().onFalse(new InstantCommand(() -> coralIntake.stop(), coralIntake));
+        //operatorController.rightBumper().whileTrue(new InstantCommand(() -> coralIntake.in(), coralIntake));
+        //operatorController.rightBumper().onFalse(new InstantCommand(() -> coralIntake.stop(), coralIntake));
 
-        operatorController.leftBumper().whileTrue(new InstantCommand(() -> coralIntake.out(), coralIntake));
-        operatorController.leftBumper().onFalse(new InstantCommand(() -> coralIntake.stop(), coralIntake));
+        //operatorController.leftBumper().whileTrue(new InstantCommand(() -> coralIntake.out(), coralIntake));
+        //operatorController.leftBumper().onFalse(new InstantCommand(() -> coralIntake.stop(), coralIntake));
         /***************************************************************************************************** */
 
         drivetrain.registerTelemetry(logger::telemeterize);

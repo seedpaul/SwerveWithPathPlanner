@@ -2,11 +2,14 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import com.revrobotics.spark.config.AbsoluteEncoderConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.EncoderConfig;
 //SparkMax motor controller
 import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.RelativeEncoder;
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkClosedLoopController;
@@ -16,10 +19,11 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkBase.ControlType;
 
 public class AlgaeElbow extends SubsystemBase {
-  private static final int deviceID = 2;
+  private static final int deviceID = 11;
   private SparkMax m_motor;
   private SparkClosedLoopController m_controller;
-  private RelativeEncoder m_encoder;
+  private AbsoluteEncoder m_encoder;
+  private AbsoluteEncoderConfig m_encoderConfig;
   private SparkMaxConfig m_motorConfig;
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
   private double targetPosition = 0;
@@ -31,7 +35,7 @@ public class AlgaeElbow extends SubsystemBase {
 
     m_motor = new SparkMax(deviceID, MotorType.kBrushless);
     m_controller = m_motor.getClosedLoopController();
-    m_encoder = m_motor.getEncoder();
+    m_encoder = m_motor.getAbsoluteEncoder();
     m_motorConfig = new SparkMaxConfig();
 
     m_motorConfig = new SparkMaxConfig();
@@ -41,16 +45,20 @@ public class AlgaeElbow extends SubsystemBase {
     m_motorConfig.idleMode(IdleMode.kBrake);
     m_motorConfig.closedLoopRampRate(3);
 
-    m_motorConfig.softLimit.reverseSoftLimit(-38.0);
+    //m_motorConfig.absoluteEncoder.positionConversionFactor(100);
+
+    m_motorConfig.softLimit.reverseSoftLimit(0);
     m_motorConfig.softLimit.reverseSoftLimitEnabled(true);
 
-    m_motorConfig.softLimit.forwardSoftLimit(0);
+    m_motorConfig.softLimit.forwardSoftLimit(26);
     m_motorConfig.softLimit.forwardSoftLimitEnabled(true);
 
-    m_encoder.setPosition(0.0);
+    //m_encoder.setPosition(0.0);
+    m_encoderConfig.zeroOffset(67.5);
 
     m_motorConfig.closedLoop
-      .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+      //.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+      .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
       // Set PID values for position control. We don't need to pass a closed loop
       // slot, as it will default to slot 0.
       .p(0.1)
@@ -91,17 +99,17 @@ public class AlgaeElbow extends SubsystemBase {
     
     SmartDashboard.putNumber("Velocity", m_encoder.getVelocity());
     SmartDashboard.putBoolean("Hit Bottom", hitBottom);
-    m_controller.setReference(targetPosition, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+    //m_controller.setReference(targetPosition, ControlType.kPosition, ClosedLoopSlot.kSlot0);
 
   }
   public void up(){
-    //m_motor.set(0.3);
-    targetPosition = 0.0;
+    m_motor.set(0.75);
+    //targetPosition = 0.0;
     //goingDown = false;
   }
   public void down(){
-    //m_motor.set(-0.3);
-    targetPosition = -38.0; 
+    m_motor.set(-0.45);
+    //targetPosition = -38.0; 
     //goingDown = true;
   }
   public void stop(){

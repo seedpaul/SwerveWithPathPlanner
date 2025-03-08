@@ -11,7 +11,7 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 //SparkMax motor controller
 import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.RelativeEncoder;
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -27,7 +27,7 @@ public class Elevator extends SubsystemBase {
   private SparkMaxConfig RightElevMotorConfig;
   private SparkMaxConfig LeftElevMotorConfig;
   private SparkClosedLoopController RightClosedLoopController;
-  private RelativeEncoder RightEncoder;
+  private AbsoluteEncoder RightEncoder;
 
   private double targetPosition = 0;
 
@@ -38,7 +38,7 @@ public class Elevator extends SubsystemBase {
     LeftElevMotor = new SparkMax(17, MotorType.kBrushless);
 
     RightClosedLoopController = RightElevMotor.getClosedLoopController();
-    RightEncoder = RightElevMotor.getEncoder();
+    RightEncoder = RightElevMotor.getAbsoluteEncoder();
 
     RightElevMotorConfig = new SparkMaxConfig();
     LeftElevMotorConfig = new SparkMaxConfig();
@@ -60,21 +60,19 @@ public class Elevator extends SubsystemBase {
     RightElevMotorConfig.closedLoopRampRate(4);
     LeftElevMotorConfig.closedLoopRampRate(4);
 
-    RightEncoder.setPosition(0.0);
+    //RightEncoder.setPosition(0.0);
     
-    RightElevMotorConfig.softLimit.reverseSoftLimit(0);
-    RightElevMotorConfig.softLimit.reverseSoftLimitEnabled(true);
+    // RightElevMotorConfig.softLimit.reverseSoftLimit(0);
+    // RightElevMotorConfig.softLimit.reverseSoftLimitEnabled(true);
 
-    RightElevMotorConfig.softLimit.forwardSoftLimit(40);
-    RightElevMotorConfig.softLimit.forwardSoftLimitEnabled(true);
+    // RightElevMotorConfig.softLimit.forwardSoftLimit(40);
+    // RightElevMotorConfig.softLimit.forwardSoftLimitEnabled(true);
 
-    RightElevMotorConfig.encoder.positionConversionFactor(1);
-    RightElevMotorConfig.encoder.velocityConversionFactor(1);
-    LeftElevMotorConfig.encoder.positionConversionFactor(1);
-    LeftElevMotorConfig.encoder.velocityConversionFactor(1);
+    RightElevMotorConfig.absoluteEncoder.positionConversionFactor(2000);
+    //RightElevMotorConfig.absoluteEncoder.velocityConversionFactor(100);
 
     RightElevMotorConfig.closedLoop
-        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+        .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
         // Set PID values for position control. We don't need to pass a closed loop
         // slot, as it will default to slot 0.
         // .p(0.1)
@@ -109,9 +107,9 @@ public class Elevator extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("elevator Actual Position", RightEncoder.getPosition());
-    SmartDashboard.putNumber("elevator Actual Velocity", RightEncoder.getVelocity());
-    SmartDashboard.putNumber("elevator Target Position", targetPosition);
+    SmartDashboard.putNumber("elevator Position", RightEncoder.getPosition());
+    SmartDashboard.putNumber("elevator Velocity", RightEncoder.getVelocity());
+    //SmartDashboard.putNumber("elevator Target Position", targetPosition);
 
     //double targetPosition = SmartDashboard.getNumber("Target Position", 0);
     //RightClosedLoopController.setReference(targetPosition, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
