@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import com.revrobotics.spark.config.AbsoluteEncoderConfig;
 import com.revrobotics.spark.config.EncoderConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
@@ -21,8 +20,8 @@ public class AlgaeElbow extends SubsystemBase {
   private static final int deviceID = 11;
   private SparkMax m_motor;
   private SparkClosedLoopController m_controller;
-  private RelativeEncoder m_encoder;
-  private EncoderConfig m_encoderConfig;
+  private RelativeEncoder m_encoderPrimary;
+  private AbsoluteEncoder m_encoderAbsolute;
   private SparkMaxConfig m_motorConfig;
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
   private int[] setpoints = { 0, 10, 20 };
@@ -33,8 +32,9 @@ public class AlgaeElbow extends SubsystemBase {
 
     m_motor = new SparkMax(deviceID, MotorType.kBrushless);
     m_controller = m_motor.getClosedLoopController();
-    m_encoder = m_motor.getEncoder();
-    m_motorConfig = new SparkMaxConfig();
+
+    m_encoderPrimary = m_motor.getEncoder();
+    m_encoderAbsolute = m_motor.getAbsoluteEncoder();
 
     m_motorConfig = new SparkMaxConfig();
 
@@ -54,6 +54,7 @@ public class AlgaeElbow extends SubsystemBase {
     m_motorConfig.inverted(false);
     m_motorConfig.idleMode(IdleMode.kBrake);
     m_motorConfig.closedLoopRampRate(3);
+
     m_motorConfig.softLimit.reverseSoftLimit(0);
     m_motorConfig.softLimit.reverseSoftLimitEnabled(false);
     m_motorConfig.softLimit.forwardSoftLimit(40);
@@ -62,7 +63,7 @@ public class AlgaeElbow extends SubsystemBase {
     m_motorConfig.encoder.positionConversionFactor(1);
     m_motorConfig.encoder.velocityConversionFactor(1);
 
-    m_encoder.setPosition(0.0);
+    m_encoderPrimary.setPosition(0.0);
     m_motor.configure(m_motorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
   }
@@ -71,8 +72,9 @@ public class AlgaeElbow extends SubsystemBase {
   public void periodic() {
 
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("elbow Position", m_encoder.getPosition());
-    SmartDashboard.putNumber("elbow Velocity", m_encoder.getVelocity());
+    SmartDashboard.putNumber("elbow primary Position", m_encoderPrimary.getPosition());
+    SmartDashboard.putNumber("elbow alternate Position", m_encoderAbsolute.getPosition());
+    SmartDashboard.putNumber("elbow Velocity", m_encoderPrimary.getVelocity());
     SmartDashboard.putNumber("elbow Target Position", setpoints[currentSetpoint]);
 
   }

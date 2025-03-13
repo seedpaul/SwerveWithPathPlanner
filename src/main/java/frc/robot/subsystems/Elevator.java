@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase.ControlType;
@@ -22,6 +23,7 @@ public class Elevator extends SubsystemBase {
   private SparkMaxConfig LeftElevMotorConfig;
   private static SparkClosedLoopController RightClosedLoopController;
   private RelativeEncoder RightRelativeEncoder;
+  private AbsoluteEncoder RightAbsoluteEncoder;
   private int[] setpoints = { 0, 10, 20, 30, 40, 50 };
   private int currentSetpoint = 0;
   private int targetPosition = 0;
@@ -34,6 +36,7 @@ public class Elevator extends SubsystemBase {
 
     RightClosedLoopController = RightElevMotor.getClosedLoopController();
     RightRelativeEncoder = RightElevMotor.getEncoder();
+    RightAbsoluteEncoder = RightElevMotor.getAbsoluteEncoder();
 
     RightElevMotorConfig = new SparkMaxConfig();
     LeftElevMotorConfig = new SparkMaxConfig();
@@ -73,11 +76,14 @@ public class Elevator extends SubsystemBase {
     RightElevMotorConfig.closedLoopRampRate(4);
     LeftElevMotorConfig.closedLoopRampRate(4);
 
-    RightElevMotorConfig.softLimit.reverseSoftLimit(0);
-    RightElevMotorConfig.softLimit.reverseSoftLimitEnabled(false);
+    RightRelativeEncoder.setPosition(0.0);
 
-    RightElevMotorConfig.softLimit.forwardSoftLimit(40);
-    RightElevMotorConfig.softLimit.forwardSoftLimitEnabled(false);
+    RightElevMotorConfig.softLimit.reverseSoftLimit(0);
+    RightElevMotorConfig.softLimit.reverseSoftLimitEnabled(true);
+
+    //RightElevMotorConfig.softLimit.forwardSoftLimit(53.5);//full height
+    RightElevMotorConfig.softLimit.forwardSoftLimit(43.5);//build space height
+    RightElevMotorConfig.softLimit.forwardSoftLimitEnabled(true);
 
     RightElevMotorConfig.absoluteEncoder.positionConversionFactor(1);
     RightElevMotorConfig.absoluteEncoder.velocityConversionFactor(1);
@@ -91,7 +97,8 @@ public class Elevator extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("elevator Position", RightRelativeEncoder.getPosition());
+    SmartDashboard.putNumber("elevator Primary Position", RightRelativeEncoder.getPosition());
+    SmartDashboard.putNumber("elevator Absolute Position", RightAbsoluteEncoder.getPosition());
     SmartDashboard.putNumber("elevator Velocity", RightRelativeEncoder.getVelocity());
     SmartDashboard.putNumber("elevator Target Position", setpoints[currentSetpoint]);
   }
@@ -117,14 +124,14 @@ public class Elevator extends SubsystemBase {
   }
 
   public void hold() {
-    RightElevMotor.set(0.05);
+    RightElevMotor.set(0.1);
   }
 
   public void upManual() {
-    RightElevMotor.set(0.3);
+    RightElevMotor.set(0.75);
   }
 
   public void downManual() {
-    RightElevMotor.set(-0.2);
+    RightElevMotor.set(-0.35);
   }
 }

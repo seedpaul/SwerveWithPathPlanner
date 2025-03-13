@@ -40,7 +40,7 @@ public class CoralIntake extends SubsystemBase {
     coralFunnelTalon.set(-0.075);
   }
   public void score(){
-    coralFunnelTalon.set(-0.5);
+    coralFunnelTalon.set(-0.25);
   }
   public void stop(){
     coralFunnelTalon.stopMotor();

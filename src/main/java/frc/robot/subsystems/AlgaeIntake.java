@@ -29,6 +29,12 @@ public class AlgaeIntake extends SubsystemBase {
     RightAIMotorConfig = new SparkMaxConfig();
     LeftAIMotorConfig = new SparkMaxConfig();
 
+    RightAIMotorConfig.voltageCompensation(12);
+    LeftAIMotorConfig.voltageCompensation(12);
+
+    RightAIMotorConfig.smartCurrentLimit(30, 150, 20);
+    LeftAIMotorConfig.smartCurrentLimit(30, 150, 20);
+
     RightAIMotor.configure(RightAIMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
     LeftAIMotor.configure(LeftAIMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
   }
