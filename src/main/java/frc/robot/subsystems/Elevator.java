@@ -33,12 +33,12 @@ public class Elevator extends SubsystemBase {
     LeftElevMotor = new SparkMax(17, MotorType.kBrushless);
 
     RightClosedLoopController = RightElevMotor.getClosedLoopController();
-    RightRelativeEncoder = RightElevMotor.getAlternateEncoder();
+    RightRelativeEncoder = RightElevMotor.getEncoder();
 
     RightElevMotorConfig = new SparkMaxConfig();
     LeftElevMotorConfig = new SparkMaxConfig();
 
-    RightElevMotorConfig.closedLoop.feedbackSensor(FeedbackSensor.kAlternateOrExternalEncoder);
+    RightElevMotorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
     RightElevMotorConfig.closedLoop.maxMotion.maxVelocity(300);
     RightElevMotorConfig.closedLoop.maxMotion.maxAcceleration(600);
     RightElevMotorConfig.closedLoop.maxMotion.allowedClosedLoopError(1);

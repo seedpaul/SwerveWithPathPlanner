@@ -3,10 +3,12 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.spark.config.AbsoluteEncoderConfig;
+import com.revrobotics.spark.config.EncoderConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkClosedLoopController;
@@ -19,8 +21,8 @@ public class AlgaeElbow extends SubsystemBase {
   private static final int deviceID = 11;
   private SparkMax m_motor;
   private SparkClosedLoopController m_controller;
-  private AbsoluteEncoder m_encoder;
-  private AbsoluteEncoderConfig m_encoderConfig;
+  private RelativeEncoder m_encoder;
+  private EncoderConfig m_encoderConfig;
   private SparkMaxConfig m_motorConfig;
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
   private int[] setpoints = { 0, 10, 20 };
@@ -31,12 +33,12 @@ public class AlgaeElbow extends SubsystemBase {
 
     m_motor = new SparkMax(deviceID, MotorType.kBrushless);
     m_controller = m_motor.getClosedLoopController();
-    m_encoder = m_motor.getAbsoluteEncoder();
+    m_encoder = m_motor.getEncoder();
     m_motorConfig = new SparkMaxConfig();
 
     m_motorConfig = new SparkMaxConfig();
 
-    m_motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kAlternateOrExternalEncoder);
+    m_motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
     m_motorConfig.closedLoop.p(0.1);
     m_motorConfig.closedLoop.i(0);
     m_motorConfig.closedLoop.d(0);
@@ -56,10 +58,11 @@ public class AlgaeElbow extends SubsystemBase {
     m_motorConfig.softLimit.reverseSoftLimitEnabled(false);
     m_motorConfig.softLimit.forwardSoftLimit(40);
     m_motorConfig.softLimit.forwardSoftLimitEnabled(false);
-    m_motorConfig.absoluteEncoder.positionConversionFactor(1);
-    m_motorConfig.absoluteEncoder.velocityConversionFactor(1);
 
-    m_encoderConfig.zeroOffset(67.5);
+    m_motorConfig.encoder.positionConversionFactor(1);
+    m_motorConfig.encoder.velocityConversionFactor(1);
+
+    m_encoder.setPosition(0.0);
     m_motor.configure(m_motorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
   }

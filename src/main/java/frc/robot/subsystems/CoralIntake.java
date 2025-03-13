@@ -7,7 +7,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class CoralIntake extends SubsystemBase {
-  private static final int deviceID = 0;//figure this out!!!!!
+  private static final int deviceID = 42;//figure this out!!!!!
   private static TalonFX coralFunnelTalon;
   private static TalonFXConfiguration funnelTalonConfiguration;
   private static CurrentLimitsConfigs currentLimitConfigs;
@@ -21,15 +21,14 @@ public class CoralIntake extends SubsystemBase {
     currentLimitConfigs.SupplyCurrentLowerLimit = 5;
     currentLimitConfigs.SupplyCurrentLimit = 40;
     currentLimitConfigs.SupplyCurrentLowerTime = 1.0;
-    currentLimitConfigs.SupplyCurrentLimitEnable = true;
+    currentLimitConfigs.SupplyCurrentLimitEnable = false;
 
     currentLimitConfigs.StatorCurrentLimit = 80;
-    currentLimitConfigs.StatorCurrentLimitEnable = true;
+    currentLimitConfigs.StatorCurrentLimitEnable = false;
     
     coralFunnelTalon = new TalonFX(deviceID);
     coralFunnelTalon.getConfigurator().apply(funnelTalonConfiguration);
     coralFunnelTalon.setNeutralMode(NeutralModeValue.Brake);
-    coralFunnelTalon.setSafetyEnabled(true);
 
   }
 
@@ -38,10 +37,10 @@ public class CoralIntake extends SubsystemBase {
     // This method will be called once per scheduler run
   }
   public void prep(){
-    coralFunnelTalon.set(0.01);
+    coralFunnelTalon.set(-0.075);
   }
   public void score(){
-    coralFunnelTalon.set(0.5);
+    coralFunnelTalon.set(-0.5);
   }
   public void stop(){
     coralFunnelTalon.stopMotor();
