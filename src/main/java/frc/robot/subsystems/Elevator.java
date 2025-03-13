@@ -23,7 +23,7 @@ public class Elevator extends SubsystemBase {
   private SparkMaxConfig LeftElevMotorConfig;
   private static SparkClosedLoopController RightClosedLoopController;
   private RelativeEncoder RightRelativeEncoder;
-  private AbsoluteEncoder RightAbsoluteEncoder;
+  //private RelativeEncoder RightAlternateEncoder;
   private int[] setpoints = { 0, 10, 20, 30, 40, 50 };
   private int currentSetpoint = 0;
   private int targetPosition = 0;
@@ -36,10 +36,14 @@ public class Elevator extends SubsystemBase {
 
     RightClosedLoopController = RightElevMotor.getClosedLoopController();
     RightRelativeEncoder = RightElevMotor.getEncoder();
-    RightAbsoluteEncoder = RightElevMotor.getAbsoluteEncoder();
+    //RightAlternateEncoder = RightElevMotor.getAlternateEncoder();
 
     RightElevMotorConfig = new SparkMaxConfig();
     LeftElevMotorConfig = new SparkMaxConfig();
+
+    // RightElevMotorConfig.alternateEncoder
+    //             .countsPerRevolution(8192)
+    //             .setSparkMaxDataPortConfig();
 
     RightElevMotorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
     RightElevMotorConfig.closedLoop.maxMotion.maxVelocity(300);
@@ -82,7 +86,7 @@ public class Elevator extends SubsystemBase {
     RightElevMotorConfig.softLimit.reverseSoftLimitEnabled(true);
 
     //RightElevMotorConfig.softLimit.forwardSoftLimit(53.5);//full height
-    RightElevMotorConfig.softLimit.forwardSoftLimit(43.5);//build space height
+    RightElevMotorConfig.softLimit.forwardSoftLimit(50.5);//build space height
     RightElevMotorConfig.softLimit.forwardSoftLimitEnabled(true);
 
     RightElevMotorConfig.absoluteEncoder.positionConversionFactor(1);
@@ -98,7 +102,7 @@ public class Elevator extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("elevator Primary Position", RightRelativeEncoder.getPosition());
-    SmartDashboard.putNumber("elevator Absolute Position", RightAbsoluteEncoder.getPosition());
+    //SmartDashboard.putNumber("elevator Absolute Position", RightAlternateEncoder.getPosition());
     SmartDashboard.putNumber("elevator Velocity", RightRelativeEncoder.getVelocity());
     SmartDashboard.putNumber("elevator Target Position", setpoints[currentSetpoint]);
   }
@@ -124,7 +128,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public void hold() {
-    RightElevMotor.set(0.1);
+    RightElevMotor.set(0.15);
   }
 
   public void upManual() {
@@ -132,6 +136,6 @@ public class Elevator extends SubsystemBase {
   }
 
   public void downManual() {
-    RightElevMotor.set(-0.35);
+    RightElevMotor.set(-0.2);
   }
 }

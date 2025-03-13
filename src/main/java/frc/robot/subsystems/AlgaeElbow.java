@@ -21,7 +21,7 @@ public class AlgaeElbow extends SubsystemBase {
   private SparkMax m_motor;
   private SparkClosedLoopController m_controller;
   private RelativeEncoder m_encoderPrimary;
-  private AbsoluteEncoder m_encoderAbsolute;
+  //private AbsoluteEncoder m_encoderAbsolute;
   private SparkMaxConfig m_motorConfig;
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
   private int[] setpoints = { 0, 10, 20 };
@@ -34,9 +34,13 @@ public class AlgaeElbow extends SubsystemBase {
     m_controller = m_motor.getClosedLoopController();
 
     m_encoderPrimary = m_motor.getEncoder();
-    m_encoderAbsolute = m_motor.getAbsoluteEncoder();
+    //m_encoderAbsolute = m_motor.getAbsoluteEncoder();
 
     m_motorConfig = new SparkMaxConfig();
+
+    // m_motorConfig.alternateEncoder
+    // .countsPerRevolution(8192)
+    // .setSparkMaxDataPortConfig();
 
     m_motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
     m_motorConfig.closedLoop.p(0.1);
@@ -73,7 +77,7 @@ public class AlgaeElbow extends SubsystemBase {
 
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("elbow primary Position", m_encoderPrimary.getPosition());
-    SmartDashboard.putNumber("elbow alternate Position", m_encoderAbsolute.getPosition());
+    //SmartDashboard.putNumber("elbow alternate Position", m_encoderAbsolute.getPosition());
     SmartDashboard.putNumber("elbow Velocity", m_encoderPrimary.getVelocity());
     SmartDashboard.putNumber("elbow Target Position", setpoints[currentSetpoint]);
 
