@@ -4,6 +4,8 @@ import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -41,6 +43,9 @@ public class RobotContainer {
     private final SendableChooser<Command> autoChooser;
 
     public RobotContainer() {
+        NamedCommands.registerCommand("autoShoot", new InstantCommand(() -> coralIntake.autoShoot(),coralIntake));
+        NamedCommands.registerCommand("autoStop", new InstantCommand(() -> coralIntake.stop(),coralIntake));
+
         autoChooser = AutoBuilder.buildAutoChooser("SimpleAuto");
         SmartDashboard.putData("Auto Mode", autoChooser);
 
@@ -93,6 +98,9 @@ public class RobotContainer {
 
         operatorController.x().whileTrue(new InstantCommand(() -> coralIntake.score(), coralIntake));
         operatorController.x().onFalse(new InstantCommand(() -> coralIntake.stop(), coralIntake));
+
+        operatorController.rightBumper().whileTrue(new InstantCommand(() -> coralIntake.retract(), coralIntake));
+        operatorController.rightBumper().onFalse(new InstantCommand(() -> coralIntake.stop(), coralIntake));
 
         /***************************************************************************************************** */
 
