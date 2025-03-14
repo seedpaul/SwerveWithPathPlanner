@@ -53,7 +53,7 @@ public class CoralIntake extends SubsystemBase {
   }
 
   public void retract(){
-    coralFunnelTalon.set(0.075);
+    coralFunnelTalon.set(0.125);
   }
-  
+
 }
