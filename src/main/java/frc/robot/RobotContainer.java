@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.*;
@@ -33,7 +34,7 @@ public class RobotContainer {
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-    public final Elevator elevator = new Elevator();
+    public final Elevator_minion elevator = new Elevator_minion();
     private final Climber climber = new Climber();
     private final AlgaeIntake algaeIntake = new AlgaeIntake();
     private final CoralIntake coralIntake = new CoralIntake();
@@ -87,10 +88,10 @@ public class RobotContainer {
 
         /*********************************************************************************************/
         /**********************         OPERATOR CONROLLER              ******************************/ 
-        operatorController.y().whileTrue(new InstantCommand(() -> elevator.upManual(), elevator));
-        operatorController.y().onFalse(new InstantCommand(() -> elevator.hold(), elevator));
+        operatorController.y().whileTrue(new RunCommand(() -> elevator.upManual(), elevator));
+        operatorController.y().onFalse(new InstantCommand(() -> elevator.stop(), elevator));
 
-        operatorController.a().whileTrue(new InstantCommand(() -> elevator.downManual(), elevator));
+        operatorController.a().whileTrue(new RunCommand(() -> elevator.downManual(), elevator));
         operatorController.a().onFalse(new InstantCommand(() -> elevator.stop(), elevator));
 
         operatorController.b().whileTrue(new InstantCommand(() -> coralIntake.prep(), coralIntake));

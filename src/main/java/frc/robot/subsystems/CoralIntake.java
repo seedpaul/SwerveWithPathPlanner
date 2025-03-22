@@ -49,7 +49,7 @@ public class CoralIntake extends SubsystemBase {
   }
 
   public void autoShoot(){
-    coralFunnelTalon.set(-0.15);
+    coralFunnelTalon.set(-0.08);
   }
 
   public void retract(){
