@@ -88,11 +88,11 @@ public class RobotContainer {
 
         /*********************************************************************************************/
         /**********************         OPERATOR CONROLLER              ******************************/ 
-        operatorController.y().whileTrue(new RunCommand(() -> elevator.upManual(), elevator));
-        operatorController.y().onFalse(new InstantCommand(() -> elevator.stop(), elevator));
+        operatorController.y().whileTrue(new InstantCommand(() -> elevator.up(), elevator));
+        //operatorController.y().onFalse(new InstantCommand(() -> elevator.stop(), elevator));
 
-        operatorController.a().whileTrue(new RunCommand(() -> elevator.downManual(), elevator));
-        operatorController.a().onFalse(new InstantCommand(() -> elevator.stop(), elevator));
+        operatorController.a().whileTrue(new InstantCommand(() -> elevator.down(), elevator));
+        //operatorController.a().onFalse(new InstantCommand(() -> elevator.stop(), elevator));
 
         operatorController.b().whileTrue(new InstantCommand(() -> coralIntake.prep(), coralIntake));
         operatorController.b().onFalse(new InstantCommand(() -> coralIntake.stop(), coralIntake));
