@@ -7,6 +7,7 @@ import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.TalonFXSConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFXS;
@@ -24,13 +25,14 @@ public class Elevator_minion extends SubsystemBase {
   private final TalonFXS fxs_Left;
   private final TalonFXSConfiguration right_cfg;
   private final TalonFXSConfiguration left_cfg;
-  private final PositionVoltage m_request = new PositionVoltage(0).withSlot(0);
+  private final PositionVoltage pid_request = new PositionVoltage(0).withSlot(0);
+  final MotionMagicVoltage mm_request = new MotionMagicVoltage(0).withSlot(0);
   private final Mechanisms m_mechanism = new Mechanisms();
   private final NeutralOut m_brake = new NeutralOut();
 
   private final DutyCycleOut rightOut = new DutyCycleOut(0);
 
-  private int[] setpointsCoral = { 0, 12, 25, 50, 64};
+  private int[] setpointsCoral = { 0, 12, 25, 50, 63};
   private int currentSetpointIndex = 0;
   private int targetPosition = 0;
 
@@ -76,19 +78,33 @@ public class Elevator_minion extends SubsystemBase {
     left_cfg.CurrentLimits.SupplyCurrentLowerTime = 1.0;
     left_cfg.CurrentLimits.SupplyCurrentLimitEnable = true;
 
+    fxs_Right.setSafetyEnabled(false);
+    fxs_Left.setSafetyEnabled(false);
+
+    right_cfg.Slot0.kS = 0.25; // Add 0.25 V output to overcome static friction
+    right_cfg.Slot0.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
+    right_cfg.Slot0.kA = 0.01; // An acceleration of 1 rps/s requires 0.01 V output
+    // right_cfg.Slot0.kP = 4.8; // A position error of 2.5 rotations results in 12 V output
+    // right_cfg.Slot0.kI = 0; // no output for integrated error
+    // right_cfg.Slot0.kD = 0.1; // A velocity error of 1 rps re
+
+    right_cfg.MotionMagic.MotionMagicCruiseVelocity = 80; // Target cruise velocity of 80 rps
+    right_cfg.MotionMagic.MotionMagicAcceleration = 160; // Target acceleration of 160 rps/s (0.5 seconds)
+    right_cfg.MotionMagic.MotionMagicJerk = 1600; // Target jerk of 1600 rps/s/s (0.1 seconds)
+
     //sl0t 0 gains are for upward movement
-    right_cfg.Slot0.kP = 1.18; 
+    right_cfg.Slot0.kP = 1.19; 
     right_cfg.Slot0.kI = 0.0; 
-    right_cfg.Slot0.kD = 0.1; 
-    right_cfg.Slot0.GravityType = GravityTypeValue.Elevator_Static;
-    right_cfg.Slot0.kG = 1.0;
-    right_cfg.Slot0.StaticFeedforwardSign = StaticFeedforwardSignValue.UseClosedLoopSign;
-    right_cfg.Slot0.kS = 0.1;
+    right_cfg.Slot0.kD = 0.3; 
+    // right_cfg.Slot0.GravityType = GravityTypeValue.Elevator_Static;
+    // right_cfg.Slot0.kG = 1.0;
+    // right_cfg.Slot0.StaticFeedforwardSign = StaticFeedforwardSignValue.UseClosedLoopSign;
+    // right_cfg.Slot0.kS = 0.1;
 
     //slot 1 gain are for downward movement
-    right_cfg.Slot1.kP = .55; 
-    right_cfg.Slot1.kI = 0.0;
-    right_cfg.Slot1.kD = 0.0;
+    //right_cfg.Slot1.kP = .3; 
+    //right_cfg.Slot1.kI = 0.0;
+    //right_cfg.Slot1.kD = 0.0;
 
     right_cfg.Voltage.withPeakForwardVoltage(Volts.of(16))
       .withPeakReverseVoltage(Volts.of(-16));
@@ -112,10 +128,15 @@ public class Elevator_minion extends SubsystemBase {
     var rotorPosSignal = fxs_Right.getRotorPosition();
     SmartDashboard.putNumber("elevator Primary Position", rotorPosSignal.getValueAsDouble());
     SmartDashboard.putNumber("elevator target Position", targetPosition);
+    SmartDashboard.putNumber("elevator closed loop error", fxs_Right.getClosedLoopError().getValue());
 
     //fxs_Right.setControl(m_request.withPosition(targetPosition).withSlot(0));
-    // if(fxs_Right.getClosedLoopError().getValue() < 1){
+    // if(Math.abs(fxs_Right.getClosedLoopError().getValue()) < 1){
     //   fxs_Right.setControl(m_brake);
+    //   SmartDashboard.putBoolean("elevator brake on", true);
+    // } 
+    // else{
+    //   SmartDashboard.putBoolean("elevator brake on", false);
     // }
   }
 
@@ -124,7 +145,7 @@ public class Elevator_minion extends SubsystemBase {
       currentSetpointIndex++;
       targetPosition = setpointsCoral[currentSetpointIndex];
       //move to target position using upward movement gains
-      fxs_Right.setControl(m_request.withPosition(targetPosition).withSlot(0));
+      fxs_Right.setControl(mm_request.withPosition(targetPosition).withSlot(0));
     }
   }
 
@@ -133,7 +154,7 @@ public class Elevator_minion extends SubsystemBase {
       currentSetpointIndex--;
       targetPosition = setpointsCoral[currentSetpointIndex];
       //move to target position using downward movement gains
-      fxs_Right.setControl(m_request.withPosition(targetPosition).withSlot(1));
+      fxs_Right.setControl(mm_request.withPosition(targetPosition).withSlot(0));
     }
   }
 
