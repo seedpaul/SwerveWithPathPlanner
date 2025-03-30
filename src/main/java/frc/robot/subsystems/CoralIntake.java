@@ -43,7 +43,7 @@ public class CoralIntake extends SubsystemBase {
   public void score(Elevator_minion elevator){
     //we're scoring on the L-4 -> slow motor
     if(elevator.getCoralLevel() == 4 || elevator.getCoralLevel() == 1){
-      coralFunnelTalon.set(-0.15);
+      coralFunnelTalon.set(-0.175);
     }else{
       coralFunnelTalon.set(-0.25);
     }

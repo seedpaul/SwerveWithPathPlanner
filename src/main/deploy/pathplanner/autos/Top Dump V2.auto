@@ -11,33 +11,27 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "auto_gotoL4"
+            "pathName": "Top Dump Path 2"
           }
         },
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 1.775
+            "pathName": "Top Dump Path 3"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "auto_shootL4"
+            "pathName": "Top Dump Path 4"
           }
         },
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 0.65
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "autoStop"
+            "pathName": "Top Dump Path 5"
           }
         }
       ]

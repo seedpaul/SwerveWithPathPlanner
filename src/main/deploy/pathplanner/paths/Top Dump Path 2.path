@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.0,
-        "y": 4.0
-      },
-      "prevControl": null,
-      "nextControl": {
-        "x": 8.25,
-        "y": 4.0
-      },
-      "isLocked": true,
-      "linkedName": null
-    },
-    {
-      "anchor": {
         "x": 5.65,
         "y": 3.9
       },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.451995823508814,
+        "y": 3.1551853882639027
+      },
+      "isLocked": false,
+      "linkedName": "Top Dump Path 1 end"
+    },
+    {
+      "anchor": {
+        "x": 1.0816368535227767,
+        "y": 0.9975250043325866
+      },
       "prevControl": {
-        "x": 5.4,
-        "y": 3.9
+        "x": 4.254123262910871,
+        "y": 1.8204572677571105
       },
       "nextControl": null,
-      "isLocked": true,
-      "linkedName": "Top Dump Path 1 end"
+      "isLocked": false,
+      "linkedName": "Top Dump Path 2 end"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 90.28666223478363
+    "rotation": -126.15039652802888
   },
   "reversed": false,
   "folder": "Top Dump",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -179.65995479183428
+    "rotation": 90.28666223478363
   },
   "useDefaultConstraints": true
 }
