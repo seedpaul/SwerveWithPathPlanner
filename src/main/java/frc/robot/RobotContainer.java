@@ -44,8 +44,19 @@ public class RobotContainer {
     private final SendableChooser<Command> autoChooser;
 
     public RobotContainer() {
-        NamedCommands.registerCommand("autoShoot", new InstantCommand(() -> coralIntake.autoShoot(),coralIntake));
+        NamedCommands.registerCommand("autoShoot", new InstantCommand(() -> coralIntake.auto_shoot(),coralIntake));
+
+        NamedCommands.registerCommand("auto_shootL1", new InstantCommand(() -> coralIntake.score(elevator),coralIntake));
+        NamedCommands.registerCommand("auto_shootL2", new InstantCommand(() -> coralIntake.score(elevator),coralIntake));
+        NamedCommands.registerCommand("auto_shootL3", new InstantCommand(() -> coralIntake.score(elevator),coralIntake));
+        NamedCommands.registerCommand("auto_shootL4", new InstantCommand(() -> coralIntake.score(elevator),coralIntake));
+
         NamedCommands.registerCommand("autoStop", new InstantCommand(() -> coralIntake.stop(),coralIntake));
+
+        NamedCommands.registerCommand("auto_gotoL1", new InstantCommand(() -> elevator.auto_gotoLevel(1),elevator));
+        NamedCommands.registerCommand("auto_gotoL2", new InstantCommand(() -> elevator.auto_gotoLevel(2),elevator));
+        NamedCommands.registerCommand("auto_gotoL3", new InstantCommand(() -> elevator.auto_gotoLevel(3),elevator));
+        NamedCommands.registerCommand("auto_gotoL4", new InstantCommand(() -> elevator.auto_gotoLevel(4),elevator));
 
         autoChooser = AutoBuilder.buildAutoChooser("SimpleAuto");
         SmartDashboard.putData("Auto Mode", autoChooser);
@@ -97,7 +108,7 @@ public class RobotContainer {
         operatorController.b().whileTrue(new InstantCommand(() -> coralIntake.prep(), coralIntake));
         operatorController.b().onFalse(new InstantCommand(() -> coralIntake.stop(), coralIntake));
 
-        operatorController.x().whileTrue(new InstantCommand(() -> coralIntake.score(), coralIntake));
+        operatorController.x().whileTrue(new InstantCommand(() -> coralIntake.score(elevator), coralIntake));
         operatorController.x().onFalse(new InstantCommand(() -> coralIntake.stop(), coralIntake));
 
         operatorController.rightBumper().whileTrue(new InstantCommand(() -> coralIntake.retract(), coralIntake));

@@ -40,15 +40,20 @@ public class CoralIntake extends SubsystemBase {
     coralFunnelTalon.set(-0.075);
   }
 
-  public void score(){
-    coralFunnelTalon.set(-0.25);
+  public void score(Elevator_minion elevator){
+    //we're scoring on the L-4 -> slow motor
+    if(elevator.getCoralLevel() == 4 || elevator.getCoralLevel() == 1){
+      coralFunnelTalon.set(-0.15);
+    }else{
+      coralFunnelTalon.set(-0.25);
+    }
   }
 
   public void stop(){
     coralFunnelTalon.stopMotor();
   }
 
-  public void autoShoot(){
+  public void auto_shoot(){
     coralFunnelTalon.set(-0.08);
   }
 

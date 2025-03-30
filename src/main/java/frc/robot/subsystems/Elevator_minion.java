@@ -32,7 +32,7 @@ public class Elevator_minion extends SubsystemBase {
 
   private final DutyCycleOut rightOut = new DutyCycleOut(0);
 
-  private int[] setpointsCoral = { 0, 12, 25, 50, 63};
+  private int[] setpointsCoral = { 0, 12, 27, 50};
   private int currentSetpointIndex = 0;
   private int targetPosition = 0;
 
@@ -130,14 +130,9 @@ public class Elevator_minion extends SubsystemBase {
     SmartDashboard.putNumber("elevator target Position", targetPosition);
     SmartDashboard.putNumber("elevator closed loop error", fxs_Right.getClosedLoopError().getValue());
 
-    //fxs_Right.setControl(m_request.withPosition(targetPosition).withSlot(0));
-    // if(Math.abs(fxs_Right.getClosedLoopError().getValue()) < 1){
-    //   fxs_Right.setControl(m_brake);
-    //   SmartDashboard.putBoolean("elevator brake on", true);
-    // } 
-    // else{
-    //   SmartDashboard.putBoolean("elevator brake on", false);
-    // }
+    this.displayPosition();
+    this.getPositionFromDash();
+
   }
 
   public void up() {
@@ -195,4 +190,50 @@ public class Elevator_minion extends SubsystemBase {
         }
 
   }
+
+  private void displayPosition(){
+
+    boolean[] currentPosition = {false,false,false,false};
+    currentPosition[currentSetpointIndex] = true;
+
+    SmartDashboard.putBoolean("Trough", currentPosition[0]);
+    SmartDashboard.putBoolean("L-2", currentPosition[1]);
+    SmartDashboard.putBoolean("L-3", currentPosition[2]);
+    SmartDashboard.putBoolean("L-4", currentPosition[3]);
+
+    SmartDashboard.putNumber("Trough setpoint", setpointsCoral[0]);
+    SmartDashboard.putNumber("L-2 setpoint", setpointsCoral[1]);
+    SmartDashboard.putNumber("L-3 setpoint", setpointsCoral[2]);
+    SmartDashboard.putNumber("L-4 setpoint", setpointsCoral[3]);
+
+  }
+
+  private void getPositionFromDash(){
+
+    double trough = SmartDashboard.getNumber("Trough", setpointsCoral[0]);
+    double l2 = SmartDashboard.getNumber("L-2", setpointsCoral[1]);
+    double l3 = SmartDashboard.getNumber("L-3", setpointsCoral[2]);
+    double l4 = SmartDashboard.getNumber("L-4", setpointsCoral[3]);
+
+    setpointsCoral[0] = (int)trough;
+    setpointsCoral[1] = (int)l2;
+    setpointsCoral[2] = (int)l3;
+    setpointsCoral[3] = (int)l4;
+
+  }
+
+  public int getCoralLevel(){
+    //return current level
+    // 1 = trough,2 = L-2,3 = L-3,4 = L-4
+    return currentSetpointIndex + 1;
+  }
+
+  public void auto_gotoLevel(int level){
+
+    currentSetpointIndex = level-1;
+    targetPosition = setpointsCoral[currentSetpointIndex];
+    fxs_Right.setControl(mm_request.withPosition(targetPosition).withSlot(0));
+
+  }
+
 }
