@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.451995823508814,
-        "y": 3.1551853882639027
+        "x": 6.605513573775362,
+        "y": 2.5658985133609487
       },
       "isLocked": false,
       "linkedName": "Top Dump Path 1 end"
     },
     {
       "anchor": {
-        "x": 1.0816368535227767,
-        "y": 0.9975250043325866
+        "x": 1.2604212205168919,
+        "y": 0.7695889563771152
       },
       "prevControl": {
-        "x": 4.254123262910871,
-        "y": 1.8204572677571105
+        "x": 5.213363757181627,
+        "y": 2.2405292091942934
       },
       "nextControl": null,
       "isLocked": false,
@@ -29,7 +29,21 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.9466093823425807,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 1.75,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {

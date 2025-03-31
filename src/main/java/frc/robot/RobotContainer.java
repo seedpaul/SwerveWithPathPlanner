@@ -46,6 +46,7 @@ public class RobotContainer {
     public RobotContainer() {
         NamedCommands.registerCommand("autoShoot", new InstantCommand(() -> coralIntake.auto_shoot(),coralIntake));
 
+        NamedCommands.registerCommand("auto_prep", new InstantCommand(() -> coralIntake.prep(),coralIntake));
         NamedCommands.registerCommand("auto_shootL1", new InstantCommand(() -> coralIntake.score(elevator),coralIntake));
         NamedCommands.registerCommand("auto_shootL2", new InstantCommand(() -> coralIntake.score(elevator),coralIntake));
         NamedCommands.registerCommand("auto_shootL3", new InstantCommand(() -> coralIntake.score(elevator),coralIntake));

@@ -19,7 +19,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.775
+            "waitTime": 1.5
           }
         },
         {
@@ -38,6 +38,148 @@
           "type": "named",
           "data": {
             "name": "autoStop"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Top Dump Path 2"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.2
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "auto_gotoL1"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top Dump Path 3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "auto_gotoL4"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "auto_shootL4"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.65
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "autoStop"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Top Dump Path 4"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.2
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "auto_gotoL1"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top Dump Path 5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "auto_gotoL4"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "auto_shootL4"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.65
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "autoStop"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "auto_gotoL1"
           }
         }
       ]
