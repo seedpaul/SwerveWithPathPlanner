@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4347070334144174,
-        "y": 1.760719955835074
+        "x": 2.2776971941931414,
+        "y": 1.8376323230479819
       },
       "isLocked": false,
       "linkedName": "Top Dump Path 2 end"
     },
     {
       "anchor": {
-        "x": 3.3095665728931682,
-        "y": 3.188059120120167
+        "x": 3.3697980141937594,
+        "y": 3.027233188624472
       },
       "prevControl": {
-        "x": 2.4535480225867214,
-        "y": 2.4389243378383885
+        "x": 2.6022882507480487,
+        "y": 2.1415547416608085
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,9 +34,9 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0,
+    "maxAcceleration": 4.0,
+    "maxAngularVelocity": 240.0,
+    "maxAngularAcceleration": 300.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
