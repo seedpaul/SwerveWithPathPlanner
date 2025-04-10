@@ -93,9 +93,9 @@ public class Elevator_minion extends SubsystemBase {
     right_cfg.MotionMagic.MotionMagicJerk = 1600; // Target jerk of 1600 rps/s/s (0.1 seconds)
 
     //sl0t 0 gains are for upward movement
-    right_cfg.Slot0.kP = 1.19; 
+    right_cfg.Slot0.kP = 1.18; 
     right_cfg.Slot0.kI = 0.0; 
-    right_cfg.Slot0.kD = 0.3; 
+    right_cfg.Slot0.kD = 0.35; 
     // right_cfg.Slot0.GravityType = GravityTypeValue.Elevator_Static;
     // right_cfg.Slot0.kG = 1.0;
     // right_cfg.Slot0.StaticFeedforwardSign = StaticFeedforwardSignValue.UseClosedLoopSign;
