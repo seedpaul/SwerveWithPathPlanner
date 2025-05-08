@@ -32,9 +32,9 @@ public class Elevator_minion extends SubsystemBase {
 
   private final DutyCycleOut rightOut = new DutyCycleOut(0);
 
-  private int[] setpointsCoral = { 0, 12, 27, 50};
+  private double[] setpointsCoral = { 0, 12, 27, 48.25};
   private int currentSetpointIndex = 0;
-  private int targetPosition = 0;
+  private double targetPosition = 0;
 
   /** Creates a new Elevator. */
   public Elevator_minion() {
@@ -88,14 +88,14 @@ public class Elevator_minion extends SubsystemBase {
     // right_cfg.Slot0.kI = 0; // no output for integrated error
     // right_cfg.Slot0.kD = 0.1; // A velocity error of 1 rps re
 
-    right_cfg.MotionMagic.MotionMagicCruiseVelocity = 80; // Target cruise velocity of 80 rps
-    right_cfg.MotionMagic.MotionMagicAcceleration = 160; // Target acceleration of 160 rps/s (0.5 seconds)
+    right_cfg.MotionMagic.MotionMagicCruiseVelocity = 65; // Target cruise velocity of 80 rps
+    right_cfg.MotionMagic.MotionMagicAcceleration = 140; // Target acceleration of 160 rps/s (0.5 seconds)
     right_cfg.MotionMagic.MotionMagicJerk = 1600; // Target jerk of 1600 rps/s/s (0.1 seconds)
 
     //sl0t 0 gains are for upward movement
-    right_cfg.Slot0.kP = 1.18; 
+    right_cfg.Slot0.kP = 1.15; 
     right_cfg.Slot0.kI = 0.0; 
-    right_cfg.Slot0.kD = 0.35; 
+    right_cfg.Slot0.kD = 0.3; 
     // right_cfg.Slot0.GravityType = GravityTypeValue.Elevator_Static;
     // right_cfg.Slot0.kG = 1.0;
     // right_cfg.Slot0.StaticFeedforwardSign = StaticFeedforwardSignValue.UseClosedLoopSign;

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.65,
-        "y": 3.9
+        "x": 4.663739220593282,
+        "y": 2.4716569128576578
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.688619648782829,
-        "y": 2.0858782567475975
+        "x": 3.0865101282245124,
+        "y": 1.4398302276288333
       },
       "isLocked": false,
       "linkedName": "Top Dump Path 1 end"
@@ -20,8 +20,8 @@
         "y": 0.733052770302113
       },
       "prevControl": {
-        "x": 5.089890090767462,
-        "y": 2.322718821569398
+        "x": 2.803985437593962,
+        "y": 1.3236296001233554
       },
       "nextControl": null,
       "isLocked": false,
@@ -75,7 +75,7 @@
   "folder": "Top Dump",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": 31.443573764077662
   },
   "useDefaultConstraints": true
 }
