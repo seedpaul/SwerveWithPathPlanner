@@ -75,6 +75,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
       m_robotContainer.drivetrain.seedFieldCentric();
     }
+    m_robotContainer.leds.setPattern();
   }
 
   @Override

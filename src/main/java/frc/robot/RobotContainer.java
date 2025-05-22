@@ -39,7 +39,7 @@ public class RobotContainer {
     private final AlgaeIntake algaeIntake = new AlgaeIntake();
     private final CoralIntake coralIntake = new CoralIntake();
     private final AlgaeElbow algaeElbow = new AlgaeElbow();
-    private final LED leds = new LED();
+    public final LED leds = new LED();
 
     /* Path follower */
     private final SendableChooser<Command> autoChooser;

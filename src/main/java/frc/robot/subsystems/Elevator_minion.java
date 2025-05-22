@@ -32,7 +32,7 @@ public class Elevator_minion extends SubsystemBase {
 
   private final DutyCycleOut rightOut = new DutyCycleOut(0);
 
-  private double[] setpointsCoral = { 0, 12, 27, 48.25};
+  private double[] setpointsCoral = { 0, 12, 27, 48.75};
   private int currentSetpointIndex = 0;
   private double targetPosition = 0;
 

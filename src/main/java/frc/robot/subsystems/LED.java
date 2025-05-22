@@ -67,4 +67,8 @@ public class LED extends SubsystemBase {
 		m_led.setPattern(m_active_pattern);
 		System.out.println("led start");
 	}
+
+	public void setPattern(){
+		m_active_pattern = m_redWhiteBlueChasePattern;
+	}
 }
