@@ -1,0 +1,80 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Center Path"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.65
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "auto_gotoL5"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.3
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "auto_shootL5"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "autoStop"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "auto_gotoL1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Align Path High"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

@@ -52,6 +52,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("auto_shootL2", new InstantCommand(() -> coralIntake.score(elevator),coralIntake));
         NamedCommands.registerCommand("auto_shootL3", new InstantCommand(() -> coralIntake.score(elevator),coralIntake));
         NamedCommands.registerCommand("auto_shootL4", new InstantCommand(() -> coralIntake.score(elevator),coralIntake));
+        NamedCommands.registerCommand("auto_shootL5", new InstantCommand(() -> coralIntake.score(elevator),coralIntake));
 
         NamedCommands.registerCommand("autoStop", new InstantCommand(() -> coralIntake.stop(),coralIntake));
 
@@ -59,6 +60,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("auto_gotoL2", new InstantCommand(() -> elevator.auto_gotoLevel(2),elevator));
         NamedCommands.registerCommand("auto_gotoL3", new InstantCommand(() -> elevator.auto_gotoLevel(3),elevator));
         NamedCommands.registerCommand("auto_gotoL4", new InstantCommand(() -> elevator.auto_gotoLevel(4),elevator));
+        NamedCommands.registerCommand("auto_gotoL5", new InstantCommand(() -> elevator.auto_gotoLevel(5),elevator));
 
         autoChooser = AutoBuilder.buildAutoChooser("SimpleAuto");
         SmartDashboard.putData("Auto Mode", autoChooser);

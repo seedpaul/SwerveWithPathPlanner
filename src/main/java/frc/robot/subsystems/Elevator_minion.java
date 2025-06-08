@@ -32,7 +32,7 @@ public class Elevator_minion extends SubsystemBase {
 
   private final DutyCycleOut rightOut = new DutyCycleOut(0);
 
-  private double[] setpointsCoral = { 0, 12, 27, 48.75};
+  private double[] setpointsCoral = {0, 12, 27, 37, 48.75, 62};
   private int currentSetpointIndex = 0;
   private double targetPosition = 0;
 
@@ -193,18 +193,22 @@ public class Elevator_minion extends SubsystemBase {
 
   private void displayPosition(){
 
-    boolean[] currentPosition = {false,false,false,false};
+    boolean[] currentPosition = {false,false,false,false,false,false};
     currentPosition[currentSetpointIndex] = true;
 
     SmartDashboard.putBoolean("Trough", currentPosition[0]);
     SmartDashboard.putBoolean("L-2", currentPosition[1]);
     SmartDashboard.putBoolean("L-3", currentPosition[2]);
     SmartDashboard.putBoolean("L-4", currentPosition[3]);
+    SmartDashboard.putBoolean("L-5", currentPosition[4]);
+    SmartDashboard.putBoolean("L-6", currentPosition[5]);
 
     SmartDashboard.putNumber("Trough setpoint", setpointsCoral[0]);
     SmartDashboard.putNumber("L-2 setpoint", setpointsCoral[1]);
     SmartDashboard.putNumber("L-3 setpoint", setpointsCoral[2]);
     SmartDashboard.putNumber("L-4 setpoint", setpointsCoral[3]);
+    SmartDashboard.putNumber("L-5 setpoint", setpointsCoral[4]);
+    SmartDashboard.putNumber("L-6 setpoint", setpointsCoral[5]);
 
   }
 
